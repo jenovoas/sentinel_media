@@ -12,7 +12,7 @@ members = [
     "system",
     "sentinel-vault-agent",
     "sentinel-media-gui/src-tauri",
-    "libs/me60os-ring0",
+    "libs/me60os-ring0", "sentinel-sandbox",
 ]
 
 # NOTA: Los directorios 'sentinel-media-gui' (Tauri) y 'sentinel-media-remotion' (Node.js) 

@@ -1,12 +1,11 @@
 // src/research_agent.rs
 //! 🛡️ Sentinel Vault: NATIVE RESEARCH AGENT 🛡️
 //! ---------------------------------------------------------------------------
-//! Maneja el ciclo de investigación profunda (RAG) y síntesis multicanal.
+//! Maneja el ciclo de investigación profunda (RAG) mediante el bucle Plan-and-Solve.
 
+use crate::brain::SentinelBrain;
 use anyhow::Result;
 use colored::Colorize;
-use sentinel_research::Args as ResearchArgs;
-use sentinel_core::FactoryConfig;
 use std::path::PathBuf;
 use serde::{Deserialize, Serialize};
 
@@ -20,50 +19,46 @@ pub struct ResearchTask {
 pub struct ResearchAgent {
     pub name: String,
     pub vault_path: PathBuf,
-    pub config: FactoryConfig,
+    pub brain: SentinelBrain,
 }
 
 impl ResearchAgent {
     pub fn new(name: &str, vault_path: &str) -> Self {
-        let config = FactoryConfig::load().unwrap_or_default();
+        let brain = SentinelBrain::new().expect("No se pudo inicializar el cerebro del agente");
         Self {
             name: name.to_string(),
             vault_path: PathBuf::from(vault_path),
-            config,
+            brain,
         }
     }
 
-    /// Ejecuta una investigación profunda para un objetivo específico
+    /// Ejecuta una investigación profunda usando el bucle Plan-and-Solve
     pub async fn solve_task(&self, task: &ResearchTask) -> Result<String> {
-        println!("🔮 [{}] Investigando tópico: '{}' para el target: {}", 
-            self.name.cyan().bold(), task.topic.yellow(), task.target.magenta());
+        println!("🔮 [{}] Iniciando Protocolo de Investigación: '{}'", 
+            self.name.cyan().bold(), task.topic.yellow());
 
-        
-        // Preparar argumentos para el motor de investigación
-        let args = ResearchArgs {
-            file: task.file_path.as_ref().map(|p| p.to_string_lossy().to_string()),
-            prompt: Some(task.topic.clone()),
-            imagina: true,
-            intuicion: true,
-            deep: true,
-            refactor: false,
-            translate: false,
-            target_lang: "es".to_string(),
-            interactive: false,
-            system: true,
-            memory_tier: "warm".to_string(),
-            telos_context: true,
-            groq: false,
-            openai: false,
-            antigravity: true,
-            perplexity: false,
-            target: task.target.clone(),
-            hook: vec![],
-        };
+        // 1. Planificación
+        let mut plan = self.brain.plan(&task.topic).await?;
+        println!("📋 [{}] Plan generado con {} pasos lógicos.", self.name.cyan(), plan.steps.len());
 
-        // En la arquitectura Fenix v2, delegamos la síntesis al crate research
-        let synthesis = sentinel_research::run(args).await?;
+        let mut cumulative_context = String::new();
+
+        // 2. Ejecución Secuencial (Plan-and-Solve)
+        for step in plan.steps.iter_mut() {
+            self.brain.solve_step(step, &cumulative_context).await?;
+            if let Some(res) = &step.result {
+                cumulative_context.push_str(&format!("\n### Paso {}: {}\n{}\n", step.id, step.description, res));
+            }
+        }
+
+        // 3. Síntesis Final
+        println!("🧬 [{}] Sintetizando reporte final para el target: {}", self.name.cyan(), task.target.magenta());
         
-        Ok(synthesis)
+        let synthesis_prompt = format!("Eres Sentinel Media - Assistant. Basándote en la siguiente investigación, genera un reporte final optimizado para: {}. El reporte debe ser técnico, profundo y profesional.", task.target);
+        
+        // Usamos la lógica de investigación para el formateo final
+        let final_report = self.brain.solve_step_direct(&synthesis_prompt, &cumulative_context).await?;
+        
+        Ok(final_report)
     }
 }

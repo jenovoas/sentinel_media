@@ -1,0 +1,16 @@
+[package]
+name = "sentinel-sandbox"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wasmer = "3.1.1"
+wasmer-wasi = "3.1.1"
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+log = "0.4"
+base64 = "0.22"
+
+[dev-dependencies]
+tempfile = "3.8"

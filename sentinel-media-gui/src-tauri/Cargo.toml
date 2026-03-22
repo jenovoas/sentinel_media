@@ -31,6 +31,14 @@ rand = "0.8"
 log = "0.4"
 lazy_static = "1.4"
 nvml-wrapper = "0.11.0"
+redis = { version = "0.32", features = ["tokio-comp"] }
+prometheus = "0.13"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+axum = "0.7"
+regex = "1.10"
+walkdir = "2.5"
+sentinel_vault_agent = { path = "../../sentinel-vault-agent" }
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Lints de Clippy - Calidad de Código Industrial

@@ -36,8 +36,8 @@ export const ClaimCard: React.FC<ClaimCardProps> = ({
 
     return (
         <motion.div
-            whileHover={{ y: -4, backgroundColor: 'rgba(255,255,255,0.03)' }}
-            className="p-6 rounded-[2rem] glass-panel border border-white/5 flex flex-col items-start text-left group transition-all"
+            whileHover={{ y: -4 }}
+            className="p-6 glass-card flex flex-col items-start text-left group"
         >
             <div className={`p-3 rounded-2xl mb-4 ${active
                     ? 'bg-sentinel-green/10 text-sentinel-green'

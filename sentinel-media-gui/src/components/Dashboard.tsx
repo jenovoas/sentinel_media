@@ -7,6 +7,7 @@ import {
     Terminal,
     Factory
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 // Custom Hook y Componentes
 import { useDashboardData, DashboardData, OpEntry, ClaimStatus } from '../hooks/useDashboardData';
@@ -95,6 +96,28 @@ const Dashboard: React.FC<DashboardProps> = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
+                    {/* MEDIDOR DE COHERENCIA (BIO-SYNC) */}
+                    <div className="flex flex-col items-end gap-1">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[9px] font-black text-white/40 uppercase tracking-widest">Coherencia Bio-Sincrónica</span>
+                            <span className={`text-[10px] font-mono font-bold ${data.stats?.coherence && data.stats.coherence > 0.9 ? 'text-sentinel-blue' : 'text-white/40'}`}>
+                                {(data.stats?.coherence ? data.stats.coherence * 100 : 0).toFixed(1)}%
+                            </span>
+                        </div>
+                        <div className="w-48 h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5 relative">
+                            <motion.div 
+                                className={`h-full bg-gradient-to-r ${data.stats?.coherence && data.stats.coherence > 0.9 ? 'from-sentinel-blue to-cyan-400' : 'from-white/20 to-white/40'}`}
+                                initial={{ width: 0 }}
+                                animate={{ width: `${(data.stats?.coherence ? data.stats.coherence * 100 : 0)}%` }}
+                                transition={{ type: "spring", stiffness: 50 }}
+                            />
+                            {/* Glow effect if coherent */}
+                            {data.stats?.coherence && data.stats.coherence > 0.9 && (
+                                <div className="absolute inset-0 bg-sentinel-blue/20 blur-sm animate-pulse" />
+                            )}
+                        </div>
+                    </div>
+
                     {/* Indicador de Agente Activo */}
                     {factoryStatus.running && (
                         <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
@@ -137,7 +160,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* OPERACIONES */}
-                <div className="lg:col-span-8 p-8 rounded-[2.5rem] glass-panel border border-white/5 flex flex-col">
+                <div className="lg:col-span-8 p-8 rounded-[2.5rem] glass flex flex-col">
                     <div className="flex justify-between items-center mb-8">
                         <h3 className="text-xs font-black text-white/60 uppercase tracking-[0.4em] flex items-center gap-3">
                             <Activity size={16} className="text-sentinel-blue" />

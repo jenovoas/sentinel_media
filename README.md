@@ -1,4 +1,5 @@
 # ⚛️ Sentinel Media | Fenix Swarm
+
 **Orquestación Neuronal, Ingeniería Defensiva y Generación Autónoma de Contenido**
 
 *Sentinel Media no es un simple script de automatización. Es una infraestructura de conocimiento profundo (SSOT) orquestada en Rust, respaldada por matemáticas en Base-60 y memorias Ring-0 (eBPF), diseñada para sintetizar filosofía técnica, física avanzada y ciberseguridad en contenido de rigor profesional.*
@@ -50,11 +51,13 @@ El sistema utiliza una arquitectura modular donde cada crate representa un agent
 | `sentinel-media-gui` | GUI Tauri (Rust + React) de monitoreo | ✅ Compila |
 
 ### 🏭 Operatividad de la Fábrica
+
 El pipeline de producción automatizado permite escanear la bóveda, orquestar agentes de generación y supervisar el renderizado de activos en tiempo real.
 
 ![Factory Pipeline](docs/img/factory_pipeline.webp)
 
 ### 📚 Gestión de la Bóveda y Editor
+
 Sentinel Media incluye un editor de biblioteca integrado para manipular el conocimiento (SSOT) directamente, permitiendo a los agentes de IA analizar, traducir e ingestar documentos Markdown.
 
 ![Library Editor](docs/img/library_editor.webp)

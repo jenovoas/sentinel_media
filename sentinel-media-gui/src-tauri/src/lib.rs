@@ -8,8 +8,10 @@ use std::path::{Path, PathBuf};
 use std::env;
 use std::sync::Mutex;
 use lazy_static::lazy_static;
-use tauri::Emitter;
+use sentinel_vault_agent::{ResearchAgent, ResearchTask};
 use sentinel_core::{OperationStore, OpStatus};
+use walkdir::WalkDir;
+use regex::Regex;
 
 pub mod factory;
 pub mod services;
@@ -79,6 +81,8 @@ pub struct CortexStats {
     pub logs_total: u32,
     pub kernel_version: String,
     pub cpu_temp: f32,
+    pub coherence: f32,
+    pub scheduler_efficiency: f32,
     pub claims: Vec<String>,
 }
 
@@ -95,6 +99,25 @@ pub struct ResearchReport {
     pub title: String,
     pub path: String,
     pub content_preview: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct VaultNode {
+    pub id: String,
+    pub label: String,
+    pub group: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct VaultEdge {
+    pub source: String,
+    pub target: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct VaultGraph {
+    pub nodes: Vec<VaultNode>,
+    pub links: Vec<VaultEdge>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -131,9 +154,84 @@ lazy_static! {
         error: Some("System Initializing".to_string()),
     });
     static ref FACTORY_PROCESS: Mutex<Option<std::process::Child>> = Mutex::new(None);
+    static ref REDIS_CLIENT: Mutex<Option<redis::Client>> = Mutex::new(None);
+}
+
+// --- Helpers ---
+fn get_redis_client() -> Result<redis::Client, String> {
+    let mut client_guard = REDIS_CLIENT.lock().map_err(|e| e.to_string())?;
+    if let Some(client) = &*client_guard {
+        return Ok(client.clone());
+    }
+    
+    let redis_url = env::var("REDIS_URL").unwrap_or_else(|_| "redis://127.0.0.1:6379".to_string());
+    let client = redis::Client::open(redis_url).map_err(|e| e.to_string())?;
+    *client_guard = Some(client.clone());
+    Ok(client)
 }
 
 // --- Comandos de Tauri ---
+
+#[tauri::command]
+async fn get_vault_graph() -> Result<VaultGraph, String> {
+    let vault_root = VAULT_PATH.clone();
+    let mut nodes = Vec::new();
+    let mut links = Vec::new();
+    
+    let re = Regex::new(r"\[\[(.*?)\]\]").map_err(|e| e.to_string())?;
+
+    for entry in WalkDir::new(&vault_root).into_iter().filter_map(|e| e.ok()) {
+        if entry.file_type().is_file() && entry.path().extension().map_or(false, |ext| ext == "md") {
+            let path = entry.path();
+            let relative_path = path.strip_prefix(&vault_root).map_err(|e| e.to_string())?;
+            let id = relative_path.to_string_lossy().to_string();
+            let label = path.file_stem().map(|s| s.to_string_lossy().to_string()).unwrap_or_default();
+            let group = relative_path.parent().map(|p| p.to_string_lossy().to_string()).unwrap_or_else(|| "root".to_string());
+
+            nodes.push(VaultNode {
+                id: id.clone(),
+                label,
+                group,
+            });
+
+            // Leer contenido para buscar links
+            if let Ok(content) = std::fs::read_to_string(path) {
+                for cap in re.captures_iter(&content) {
+                    let mut target = cap[1].to_string();
+                    // Normalizar: si no termina en .md, añadirlo
+                    if !target.ends_with(".md") {
+                        target.push_str(".md");
+                    }
+                    
+                    // Solo añadir link si el target existe o es probable que exista (simplificado)
+                    links.push(VaultEdge {
+                        source: id.clone(),
+                        target,
+                    });
+                }
+            }
+        }
+    }
+
+    Ok(VaultGraph { nodes, links })
+}
+
+#[tauri::command]
+async fn inject_bio_pulse() -> Result<(), String> {
+    services::metrics::BIO_PULSE_COUNTER.inc();
+    
+    let client = get_redis_client()?;
+    let mut con = client.get_async_connection().await.map_err(|e| e.to_string())?;
+    
+    redis::cmd("PUBLISH")
+        .arg("sentinel:bio_pulse")
+        .arg("PULSE")
+        .query_async::<_, ()>(&mut con)
+        .await
+        .map_err(|e| e.to_string())?;
+        
+    Ok(())
+}
 
 #[tauri::command]
 async fn get_active_gcp_project() -> Result<String, String> {
@@ -216,16 +314,43 @@ async fn get_agentes() -> Result<Vec<serde_json::Value>, String> {
 
 #[tauri::command]
 async fn get_estadisticas_cortex() -> Result<CortexStats, String> {
+    // Intentar obtener datos reales de la API de Fenix
+    let client = reqwest::Client::new();
+    let url = "http://localhost:8000/health"; // Fenix Cortex URL
+    
+    match client.get(url).send().await {
+        Ok(resp) => {
+            if let Ok(json) = resp.json::<serde_json::Value>().await {
+                return Ok(CortexStats {
+                    cpu_usage: 12.5, // Fenix Mock/Real mix
+                    memory_used: 4096,
+                    memory_total: 16384,
+                    uptime: 3600,
+                    firewall_active: true,
+                    logs_total: 1500,
+                    kernel_version: "Sentinel-Sovereign-Fenix".to_string(),
+                    cpu_temp: 45.0,
+                    coherence: json["metrics"]["coherence"].as_f64().unwrap_or(0.0) as f32 / 12_960_000.0,
+                    scheduler_efficiency: json["metrics"]["efficiency"].as_f64().unwrap_or(0.0) as f32 / 12_960_000.0,
+                    claims: vec![],
+                });
+            }
+        }
+        Err(_) => {}
+    }
+
     Ok(CortexStats {
-        cpu_usage: 8.5,
+        cpu_usage: 5.0,
         memory_used: 2048,
         memory_total: 16384,
-        uptime: 7200,
+        uptime: 0,
         firewall_active: true,
-        logs_total: 2450,
-        kernel_version: "Sentinel-Sovereign-v2.0".to_string(),
-        cpu_temp: 39.5,
-        claims: vec![],
+        logs_total: 0,
+        kernel_version: "Sentinel-Disconnected".to_string(),
+        cpu_temp: 30.0,
+        coherence: 0.0,
+        scheduler_efficiency: 0.0,
+        claims: vec!["OFFLINE".to_string()],
     })
 }
 
@@ -361,8 +486,24 @@ async fn get_reportes_investigacion() -> Result<Vec<ResearchReport>, String> {
 #[tauri::command]
 async fn analizar_archivo(path: String) -> Result<(), String> {
     println!("🧪 [Agente] Iniciando análisis profundo de: {}", path);
-    // Simular inicio de tarea
-    Ok(())
+    
+    let agent = ResearchAgent::new("Sentinel-Brain", &VAULT_PATH.to_string_lossy());
+    let task = ResearchTask {
+        topic: format!("Analiza el contenido del archivo '{}' para extraer los axiomas técnicos fundamentales y generar un resumen ejecutivo de alta fidelidad.", path),
+        file_path: Some(PathBuf::from(path)),
+        target: "marketing-pack".to_string(),
+    };
+
+    match agent.solve_task(&task).await {
+        Ok(result) => {
+            println!("✅ [Agente] Análisis Finalizado con Éxito:\n{}", result);
+            Ok(())
+        },
+        Err(e) => {
+            println!("❌ [Agente] Error durante el análisis: {}", e);
+            Err(e.to_string())
+        }
+    }
 }
 
 #[tauri::command]
@@ -590,6 +731,10 @@ pub fn run() {
             let handle = app.handle().clone();
             services::gpu_monitor::start_monitor(handle.clone());
             services::log_streamer::start_log_stream(handle);
+            
+            // Iniciar servidor de métricas Prometheus (9091)
+            tokio::spawn(services::metrics::start_metrics_server());
+            
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -623,6 +768,8 @@ pub fn run() {
             iniciar_tarea_investigacion,
             get_estado_agente_investigacion,
             get_tareas_investigacion_activas,
+            inject_bio_pulse,
+            get_vault_graph,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

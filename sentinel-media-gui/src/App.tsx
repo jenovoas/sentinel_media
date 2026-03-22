@@ -12,10 +12,40 @@ import SettingsView from './components/SettingsView';
 import CognitiveLayer from './components/CognitiveLayer';
 import SentinomicsView from './components/SentinomicsView';
 import ProductionView from './components/ProductionView';
+import VaultMap from './components/VaultMap';
 import { motion, AnimatePresence } from 'framer-motion';
+import { invoke } from '@tauri-apps/api/core';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState('observe');
+
+  // --- Sistema de Bio-Sync (Human Pulse Injection) ---
+  React.useEffect(() => {
+    let lastPulse = 0;
+    const PULSE_THROTTLE_MS = 1000; // Un pulso por segundo max
+
+    const handleActivity = async () => {
+      const now = Date.now();
+      if (now - lastPulse > PULSE_THROTTLE_MS) {
+        lastPulse = now;
+        try {
+          await invoke('inject_bio_pulse');
+          // No logueamos para no saturar la consola del usuario, 
+          // pero el backend de Fenix lo registrará.
+        } catch (e) {
+          console.error("Fallo en Bio-Sync Bridge:", e);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleActivity);
+    window.addEventListener('mousedown', handleActivity);
+
+    return () => {
+      window.removeEventListener('keydown', handleActivity);
+      window.removeEventListener('mousedown', handleActivity);
+    };
+  }, []);
 
   const renderView = () => {
     switch (currentView) {
@@ -31,15 +61,17 @@ const App: React.FC = () => {
       case 'cognitive': return <CognitiveLayer />;
       case 'settings': return <SettingsView />;
       case 'commands': return <CommandPalette />;
+      case 'map': return <VaultMap />;
       default: return <Dashboard />;
     }
   };
 
   return (
-    <div className="flex h-screen bg-cyber-dark text-white overflow-hidden font-sans selection:bg-sentinel-blue/30 antialiased">
+    <div className="flex h-screen bg-cyber-dark text-white overflow-hidden font-sans selection:bg-sentinel-blue/30 antialiased selection:text-white">
       <Sidebar currentView={currentView} setView={setCurrentView} />
-      <main className="flex-1 relative overflow-hidden bg-[radial-gradient(circle_at_50%_0%,rgba(0,217,255,0.05),transparent_70%)]">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+      <main className="flex-1 relative overflow-hidden">
+        {/* Orbs de fondo dinámicos ya definidos en CSS, pero podemos añadir ruido aquí */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] pointer-events-none" />
         <AnimatePresence mode="wait">
           <motion.div
             key={currentView}

@@ -1,11 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cyber-dark: #0a0a0c;
+  --color-cyber-dark: #070709; /* Más profundo */
   --color-sentinel-blue: #00d9ff;
   --color-sentinel-green: #10b981;
+  --color-sentinel-purple: #8b5cf6;
+  --color-glass-white: rgba(255, 255, 255, 0.05);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
 
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
@@ -15,7 +18,7 @@
   font-weight: 400;
 
   color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: #e5e7eb;
   background-color: var(--color-cyber-dark);
 
   font-synthesis: none;
@@ -31,10 +34,51 @@ body {
   min-height: 100vh;
   overflow: hidden;
   background-color: var(--color-cyber-dark);
+  /* Orbs de fondo decorativos */
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 217, 255, 0.07) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.07) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
 }
 
 #root {
   width: 100%;
+}
+
+/* Glassmorphism Classes */
+.glass {
+  background: rgba(18, 18, 22, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.glass-input {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  transition: border-color 0.3s;
+}
+
+.glass-input:focus {
+  border-color: var(--color-sentinel-blue);
+  outline: none;
 }
 
 /* Scrollbar Personalizado */
@@ -43,11 +87,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-cyber-dark);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 }
 
@@ -55,28 +99,12 @@ body {
   background: var(--color-sentinel-blue);
 }
 
-.glass-panel {
-  background: rgba(18, 18, 22, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+/* Animaciones */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(0, 217, 255, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(0, 217, 255, 0.4); }
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-
-@keyframes pulse-soft {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.animate-pulse-soft {
-  animation: pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.animate-glow {
+  animation: glow 3s infinite;
 }

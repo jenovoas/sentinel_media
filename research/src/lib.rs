@@ -5,7 +5,6 @@ use colored::*;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::process::Command;
-use std::path::PathBuf;
 use serde_json::json;
 use sentinel_core::FactoryConfig;
 
@@ -101,20 +100,56 @@ impl SentinelResearch {
     }
 
     pub async fn synthesize_vertex(&self, config: &FactoryConfig, system_msg: &str, user_msg: &str) -> Result<String> {
+        // Prioridad 1: Google AI Studio API (Si hay claves configuradas)
+        if let Some(ref api_keys) = config.gemini_api_keys {
+            let api_key = api_keys.split(',').next().unwrap_or(api_keys);
+            let url = format!(
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={}",
+                api_key
+            );
+
+            let body = json!({
+                "contents": [
+                    { "role": "user", "parts": [{ "text": user_msg }] }
+                ],
+                "systemInstruction": { "role": "system", "parts": [{ "text": system_msg }] }
+            });
+
+            let res = self.client.post(&url)
+                .json(&body)
+                .send()
+                .await?;
+
+            if res.status().is_success() {
+                let json: VertexResponse = res.json().await?;
+                if let Some(candidate) = json.candidates.first() {
+                    if let Some(part) = candidate.content.parts.first() {
+                        return Ok(part.text.clone());
+                    }
+                }
+                anyhow::bail!("Google AI retornó una respuesta vacía");
+            } else {
+                let status = res.status();
+                let err_text = res.text().await.unwrap_or_default();
+                anyhow::bail!("Google AI Error ({}): {}", status, err_text);
+            }
+        }
+
+        // Prioridad 2: Vertex AI (Fallback por gcloud)
         let project = config.gcloud_project_id.as_ref()
             .context("Error: gcloud_project_id no configurado en FactoryConfig")?;
         let region = config.gcloud_region.as_ref()
             .map(|s| s.as_str())
             .unwrap_or("us-central1");
         
-        let model = "gemini-2.0-flash-001";
+        let model = "gemini-1.5-flash";
 
-        // Obtener Token via gcloud CLI (Simplificado para esta fase)
+        // Obtener Token via gcloud CLI
         let token_out = Command::new("gcloud").args(&["auth", "print-access-token"]).output()
-            .context("Error al ejecutar gcloud auth print-access-token. ¿Está instalado y autenticado?")?;
+            .context("Error al ejecutar gcloud auth print-access-token")?;
         
         if !token_out.status.success() {
-            anyhow::bail!("Error al obtener token de gcloud: {}", String::from_utf8_lossy(&token_out.stderr));
+            anyhow::bail!("Error al obtener token de gcloud");
         }
         
         let token = String::from_utf8_lossy(&token_out.stdout).trim().to_string();
@@ -141,7 +176,7 @@ impl SentinelResearch {
                     return Ok(part.text.clone());
                 }
             }
-            anyhow::bail!("Vertex AI retornó una respuesta vacía o malformada");
+            anyhow::bail!("Vertex AI retornó una respuesta vacía");
         } else {
             let status = res.status();
             let err_text = res.text().await.unwrap_or_default();

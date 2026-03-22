@@ -12,7 +12,8 @@ import {
     Brain,
     Settings,
     Shield,
-    Globe
+    Globe,
+    Share2
 } from 'lucide-react';
 import { invoke } from '@tauri-apps/api/core';
 import { motion } from 'framer-motion';
@@ -44,6 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, setView }) => {
         { id: 'dialog', label: 'CONSULTA', icon: MessageSquare, desc: 'Interfaz LLM' },
         { id: 'swarm', label: 'AGENTES', icon: Rocket, desc: 'Orquestación Rust' },
         { id: 'vault', label: 'BIBLIOTECA', icon: Database, desc: 'Bóveda Obsidian' },
+        { id: 'map', label: 'MAPA BÓVEDA', icon: Share2, desc: 'Grafo Relacional' },
         { id: 'factory', label: 'FÁBRICA', icon: Factory, desc: 'Producción Media' },
         { id: 'commands', label: 'COMANDOS', icon: Terminal, desc: 'Machete Sentinel' },
         { id: 'hacker', label: 'CONSOLA', icon: Activity, desc: 'Terminal Nodo' },

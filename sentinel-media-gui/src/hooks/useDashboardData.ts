@@ -31,6 +31,8 @@ export interface CortexStats {
     kernel_version: string;
     claims: ClaimStatus[];
     cpu_temp: number;
+    coherence: number;
+    scheduler_efficiency: number;
     truthsync_audit?: {
         timestamp: string;
         global_integrity: number;

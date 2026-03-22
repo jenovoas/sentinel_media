@@ -22,6 +22,8 @@ clap = { version = "4.5", features = ["derive"] }
 sha2 = "0.10"
 chrono = { version = "0.4", features = ["serde"] }
 anyhow = "1.0"
+log = "0.4"
 sentinel_core = { path = "../core" }
 sentinel_memory = { path = "../memory" }
 sentinel_research = { path = "../research" }
+sentinel-sandbox = { path = "../sentinel-sandbox" }

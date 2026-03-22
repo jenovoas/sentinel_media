@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # Nodo de Interfaz y Telemetría
+  sentinel-media-gui:
+    build: 
+      context: .
+      dockerfile: ./sentinel-media-gui/Dockerfile
+    container_name: sentinel-media-portal
+    environment:
+      - REDIS_URL=redis://sentinel-redis:6379
+      - SENTINEL_VAULT_PATH=/home/jnovoas/Desarrollo/sentinel_media/vault
+      - PORT=9091
+    networks:
+      - sentinel_network
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Capa de Sincronización Bio-Resonante
+  redis:
+    image: redis:alpine
+    container_name: sentinel-redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    networks:
+      - sentinel_network
+    volumes:
+      - redis_data:/data
+
+  # Capa de Observabilidad (Métricas de Enjambre)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: sentinel-prometheus
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - "9090:9090"
+    networks:
+      - sentinel_network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: sentinel-grafana
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=sentinel_admin
+    networks:
+      - sentinel_network
+    depends_on:
+      - prometheus
+
+networks:
+  sentinel_network:
+    name: sentinel_network
+    driver: bridge
+
+volumes:
+  redis_data:
+  grafana_data:

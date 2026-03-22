@@ -24,7 +24,7 @@ export const KPICard: React.FC<KPICardProps> = ({
     return (
         <motion.div
             whileHover={{ y: -4, scale: 1.02 }}
-            className={`p-8 rounded-[2rem] glass-panel border border-white/5 flex flex-col items-center text-center group transition-all ${colorClasses[color]} ${className}`}
+            className={`p-8 glass-card flex flex-col items-center text-center group ${colorClasses[color]} ${className}`}
         >
             <span className={`text-3xl font-black mb-2 font-mono ${color === 'white' ? 'text-white/80' : `text-sentinel-${color}`}`}>
                 {value}

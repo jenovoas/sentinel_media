@@ -108,7 +108,7 @@ export const HardwareMetrics: React.FC<HardwareMetricsProps> = ({
     return (
         <div className="space-y-6">
             {/* Métricas de Sistema */}
-            <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10">
+            <div className="p-8 glass">
                 <h3 className="text-xs font-black text-white/60 uppercase tracking-[0.4em] mb-8 flex items-center gap-3">
                     <Server size={16} className="text-sentinel-blue" />
                     MÉTRICAS FÍSICAS
@@ -143,7 +143,7 @@ export const HardwareMetrics: React.FC<HardwareMetricsProps> = ({
             </div>
 
             {/* CPU Temperature */}
-            <div className="p-8 rounded-[2.5rem] glass-panel border border-white/5 text-center">
+            <div className="p-8 glass text-center">
                 <h3 className="text-xs font-black text-white/60 uppercase tracking-[0.4em] mb-4 flex items-center justify-center gap-2">
                     <Cpu size={16} className="text-sentinel-blue" />
                     Temp de CPU
@@ -154,7 +154,7 @@ export const HardwareMetrics: React.FC<HardwareMetricsProps> = ({
             </div>
 
             {/* GPU Status Block */}
-            <div className={`p-8 rounded-[2.5rem] border transition-colors ${gpuStatus?.status === 'Active' ? 'bg-gradient-to-br from-sentinel-blue/5 to-transparent border-sentinel-blue/20' :
+            <div className={`p-8 glass transition-colors ${gpuStatus?.status === 'Active' ? 'bg-sentinel-blue/5 border-sentinel-blue/20' :
                     gpuStatus?.status === 'Throttling' ? 'bg-yellow-500/5 border-yellow-500/20' :
                         'bg-white/5 border-white/10'
                 }`}>
