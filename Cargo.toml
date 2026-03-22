@@ -1,16 +1,16 @@
 [workspace]
 resolver = "2"
 members = [
-    "sentinel_media_core",
-    "sentinel_media_scanner",
-    "sentinel_media_research",
-    "sentinel_media_media",
-    "sentinel_media_publisher",
-    "sentinel_media_verifier",
-    "sentinel_media_memory",
-    "sentinel_media_cli",
-    "sentinel_media_system",
-    "sentinel_media_obs_agent",
+    "core",
+    "scanner",
+    "research",
+    "media",
+    "publisher",
+    "verifier",
+    "memory",
+    "cli",
+    "system",
+    "agent-obsidian",
     "sentinel-media-gui/src-tauri",
 ]
 
