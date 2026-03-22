@@ -41,7 +41,7 @@ impl FactoryAgent {
         }
 
         // Directorio de Prompts
-        let prompt_dir = "/home/jnovoas/Desarrollo/obsidian/_Agentes/prompts";
+        let prompt_dir = std::env::var("FACTORY_PROMPTS_PATH").unwrap_or_else(|_| "core/prompts".to_string());
         let default_prompt_path = format!("{}/youtube_architect.md", prompt_dir);
         let sys_prompt = fs::read_to_string(&default_prompt_path)
             .unwrap_or_else(|_| "You are a helpful AI.".to_string());
@@ -110,7 +110,7 @@ impl AgentSPA for FactoryAgent {
 
         if self.current_load < high_load {
             // Leer Control State para forzar/cancelar
-            let control_path = "/tmp/cortex_control.json";
+            let control_path = std::env::var("CORTEX_CONTROL_PATH").unwrap_or_else(|_| "/tmp/cortex_control.json".to_string());
             if let Ok(content) = std::fs::read_to_string(control_path) {
                 if let Ok(state) =
                     serde_json::from_str::<crate::control_agent::ControlState>(&content)

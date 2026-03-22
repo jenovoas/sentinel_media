@@ -4,10 +4,10 @@ use colored::Colorize;
 use std::path::PathBuf;
 
 // Import run functions and arg structs from the library crates
-use sentinel_media_scanner::{run as scan, Args as ScanArgs, ScanOutput};
-use sentinel_media_research::{run as research, Args as ResearchArgs};
-use sentinel_media_media::{run as produce, Args as MediaArgs};
-use sentinel_media_publisher::{run as publish, Args as PublishArgs};
+use core::{run as scan, Args as ScanArgs, ScanOutput};
+use research::{run as research, Args as ResearchArgs};
+use media::{run as produce, Args as MediaArgs};
+use publisher::{run as publish, Args as PublishArgs};
 
 #[derive(Parser, Debug)]
 #[command(name = "sentinel", author = "Sentinel Swarm", version = "0.9.0")]
