@@ -1,18 +1,9 @@
 # ⚛️ Sentinel Media | Fenix Swarm
-
 **Orquestación Neuronal, Ingeniería Defensiva y Generación Autónoma de Contenido**
 
 *Sentinel Media no es un simple script de automatización. Es una infraestructura de conocimiento profundo (SSOT) orquestada en Rust, respaldada por matemáticas en Base-60 y memorias Ring-0 (eBPF), diseñada para sintetizar filosofía técnica, física avanzada y ciberseguridad en contenido de rigor profesional.*
 
-## 💎 Filosofía y Alma del Sistema (Los 5 Axiomas Inmutables)
-
-Toda IA, Agente o Pipeline operando en este entorno debe someterse a la siguiente matriz:
-
-1. **SEPARACIÓN DE DOMINIOS** — La Bóveda (`vault/`) gestiona el conocimiento y significado. Sentinel gestiona la infraestructura de la fábrica. Prohibido mezclarlos.
-2. **PRECISIÓN EN EL CONOCIMIENTO** — Validación estricta de fuentes. Distinguir la teoría interna (Matemática S60) de la ciencia empírica externa.
-3. **VERDAD SISTÉMICA** — Auditoría continua contra oráculos y modelos consolidados (NotebookLM / Vertex AI) a pedido del usuario.
-4. **HONESTIDAD RADICAL** — Prohibido alucinar. Ante la duda o falta de evidencia computacional, el sistema reporta "SIN DATOS".
-5. **IDIOMA SAGRADO** — El **Español** es obligatorio para todo el flujo conversacional, generación y estrategia. El Inglés se reserva puramente para la sintaxis técnica del código.
+> **Aviso para Contribuidores / IA**: Si buscas las reglas operativas de IA o Los 5 Axiomas Inmutables que rigen moral y tácticamente el proyecto, el mapa cognitivo se ha reubicado en `vault/_Agentes/ANTIGRAVITY_CONTEXT.md` como Prompt del Sistema maestro.
 
 ## 🏗️ Jerarquía de Verdad (SSOT)
 
@@ -25,7 +16,7 @@ La toma de decisiones del Cortex se basa en un flujo sagrado de ingesta:
 
 ## 📡 Focos de Emisión (Canales Activos)
 
-La *Factory* está diseñada para nutrir pilares de conocimiento técnico denso y sin diluir, rechazando de pleno los enfoques genéricos:
+La *Factory* está diseñada para nutrir pilares de conocimiento técnico denso y sin diluir, rechazando de pleno enfoques genéricos:
 
 - 🐧 **SecurePenguin ("El Ingeniero Soberano")** — Ciberseguridad Defensiva, eBPF y Hardening. Promulga la soberanía digital y el paso de C a Rust como victoria táctica del siglo.
 - 🌀 **ZeroRing ("La Elegancia de las Leyes Naturales")** — Física Avanzada, entropía, cosmología teórica y sistemas ZPE.
