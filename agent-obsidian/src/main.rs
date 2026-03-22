@@ -70,7 +70,7 @@ async fn run_daemon() -> Result<(), Box<dyn std::error::Error>> {
     let mut manager = AgentManager::new();
 
     // 3. Register Native Agents
-    let res_agent = ResearchAgent::new("Oracle-Alpha", "/home/jnovoas/Obsidian");
+    let res_agent = ResearchAgent::new("Oracle-Alpha", "vault/");
     let fac_agent = FactoryAgent::new(
         "Factory-Alpha",
         {
@@ -80,21 +80,14 @@ async fn run_daemon() -> Result<(), Box<dyn std::error::Error>> {
     );
     let sol_agent = obs_agente_rs::solar_agent::SolarAgent::new("Helios-1", "DEMO_KEY");
     
-    let ctrl_agent = obs_agente_rs::control_agent::ControlAgent::new(
-        "Control-Center",
-        "/home/jnovoas/Obsidian/🎛️ CONTROL_ROOM.md",
-        "/tmp/cortex_control.json",
-    );
-    
     let cloud_agent = obs_agente_rs::cloud_ops_agent::CloudOpsAgent::new(
         "Cloud-Harvester",
-        "/home/jnovoas/Obsidian/_Agentes/.sentinel/operations.json",
+        ".sentinel/operations.json",
     );
 
     manager.register_agent(Box::new(res_agent));
     manager.register_agent(Box::new(fac_agent));
     manager.register_agent(Box::new(sol_agent));
-    manager.register_agent(Box::new(ctrl_agent));
     manager.register_agent(Box::new(cloud_agent));
 
     // 4. Resonant Loop (41Hz)
