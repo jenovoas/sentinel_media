@@ -1,60 +1,54 @@
-# Sentinel Media (Fenix)
+# ⚛️ Sentinel Media | Fenix Swarm
+**Orquestación Neuronal, Ingeniería Defensiva y Generación Autónoma de Contenido**
 
-**Enjambre Autónomo de Contenido | Rust & Vertex AI**
+*Sentinel Media no es un simple script de automatización. Es una infraestructura de conocimiento profundo (SSOT) orquestada en Rust, respaldada por matemáticas en Base-60 y memorias Ring-0 (eBPF), diseñada para sintetizar filosofía técnica, física avanzada y ciberseguridad en contenido de rigor profesional.*
 
-Sentinel Media transforma notas de Obsidian en videos de YouTube mediante un enjambre de agentes especializados y memorias Ring 0.
+## 💎 Filosofía y Alma del Sistema (Los 5 Axiomas Inmutables)
 
-## 🐝 El Enjambre
+Toda IA, Agente o Pipeline operando en este entorno debe someterse a la siguiente matriz:
 
-Estructura modular de agentes coordinados por la infraestructura Fenix:
+1. **SEPARACIÓN DE DOMINIOS** — La Bóveda (`vault/`) gestiona el conocimiento y significado. Sentinel gestiona la infraestructura de la fábrica. Prohibido mezclarlos.
+2. **PRECISIÓN EN EL CONOCIMIENTO** — Validación estricta de fuentes. Distinguir la teoría interna (Matemática S60) de la ciencia empírica externa.
+3. **VERDAD SISTÉMICA** — Auditoría continua contra oráculos y modelos consolidados (NotebookLM / Vertex AI) a pedido del usuario.
+4. **HONESTIDAD RADICAL** — Prohibido alucinar. Ante la duda o falta de evidencia computacional, el sistema reporta "SIN DATOS". 
+5. **IDIOMA SAGRADO** — El **Español** es obligatorio para todo el flujo conversacional, generación y estrategia. El Inglés se reserva puramente para la sintaxis técnica del código.
 
-- **Escáner**: Identifica notas listas en Obsidian.
-- **Investigación**: Crea guiones con Gemini 2.0 Flash.
-- **Fábrica**: Genera video cinematográfico con **Veo 3.0**.
-- **Publicador**: Automatiza subidas a YouTube con OAuth2.
-- **Panel**: Interfaz Tauri para monitoreo en tiempo real.
+## 🏗️ Jerarquía de Verdad (SSOT)
 
-## 🚀 Flujo Rápido
+La toma de decisiones del Cortex se basa en un flujo sagrado de ingesta:
 
-1. Crea nota en Obsidian.
-2. Marca como `ready: true`.
-3. El enjambre procesa, renderiza y publica automáticamente.
+1. **Ring 0 (eBPF)** — ACTIVO (modo monitor). Observabilidad del sistema a nivel Kernel.
+2. **Memoria Neuronal (Rust)** — Núcleo nato de retención en `libs/me60os` (ResonantBuffer / CrystalLattice / mmap).
+3. **RAG (La Bóveda)** — El clúster de conocimiento Markdown local bajo `vault/`.
+4. **Bóveda Manager (Cortex)** — Orquestación autónoma que ensambla los nodos de memoria y dirige el comportamiento.
+
+## 📡 Focos de Emisión (Canales Activos)
+
+La *Factory* está diseñada para nutrir pilares de conocimiento técnico denso y sin diluir, rechazando de pleno los enfoques genéricos:
+
+- 🐧 **SecurePenguin ("El Ingeniero Soberano")** — Ciberseguridad Defensiva, eBPF y Hardening. Promulga la soberanía digital y el paso de C a Rust como victoria táctica del siglo.
+- 🌀 **ZeroRing ("La Elegancia de las Leyes Naturales")** — Física Avanzada, entropía, cosmología teórica y sistemas ZPE.
+- 🦀 **SentinelLabs ("Arquitectura de Sistemas")** — OS Internals, desarrollo profundo en Rust, optimización y mecánicas del Kernel.
+
+## 🏭 La Fábrica (Crates y Módulos)
+
+El enjambre de agentes Rust opera bajo una sincronía estricta, desacoplado en nodos de responsabilidad singular:
+
+- `sentinel_scanner`: Rastrea la bóveda, lee los umbrales de densidad y prioriza las semillas marcadas como `ready: true`.
+- `sentinel_research`: Oráculo sintético conectado a Vertex AI (Gemini 2.0 Flash / Perplexity). Hila guiones maestros cruzando `vault/` con contextos globales.
+- `sentinel_media`: Motor cinematográfico (Veo 3.0 / NVENC). Orquesta la materialización del asset.
+- `sentinel_publisher`: Motor autónomo de despliegue y telemetría sobre OAuth2 (YouTube).
+- `sentinel_memory` & `libs/me60os`: Base algorítmica soportada en matemática **Base-60** para el cálculo de latencias, memoria SPA y geometría fractal (Ciclo 10-5-6-5).
+
+## 🚀 Despliegue del Enjambre
 
 ```bash
-# PASO 1 — Escanear bóveda y detectar candidatos listos
-sentinel scan --vault ~/mi-vault --min-score 0.9
+# PASO 1 — Escanear conocimiento estructurado en la bóveda
+sentinel scan --vault ./vault --min-score 0.9
 
-# PASO 2 — Generar guiones e iniciar la cadena de producción
+# PASO 2 — Orquestar Síntesis e Iniciar la Factory
 sentinel factory --research --provider gemini
 ```
 
-## 📂 Estructura del Repositorio
-
-| Directorio | Descripción |
-|---|---|
-| `cli/` | Punto de entrada principal. Orquesta todos los agentes mediante subcomandos (`scan`, `factory`, `research`, `status`). |
-| `core/` | Tipos unificados, traits compartidos y lógica fundamental del enjambre. |
-| `scanner/` | Identifica notas en la bóveda de Obsidian marcadas como `ready: true` y calcula su puntuación de prioridad. |
-| `research/` | Genera guiones y dossiers usando Gemini 2.0 Flash / Perplexity. Soporta PDFs, ingesta de memoria y modo `--deep`. |
-| `media/` | Fábrica de video. Orquesta la generación cinematográfica con Vertex AI (Veo 3.0) y renderizado local (NVENC). |
-| `publisher/` | Motor de automatización de YouTube: sube el video, aplica metadatos y gestiona OAuth2. |
-| `verifier/` | Valida la integridad de los activos generados antes de publicar. |
-| `memory/` | Capa de memoria Ring 0: embeddings RAG, neuronas LIF y persistencia `CrystalLattice` (mmap). |
-| `system/` | Asistente SysAdmin: traduce lenguaje natural a comandos seguros de Debian. |
-| `agent-obsidian/` | Agente de integración con Obsidian (lecto-escritura de notas y metadatos). |
-| `sentinel-media-gui/` | Panel de control Tauri + React para monitoreo en tiempo real del enjambre. |
-| `sentinel-media-remotion/` | Compositor de video alternativo basado en Remotion (Node.js). |
-
-## 🛠️ Tecnologías
-
-- **Rust**: Núcleo y agentes (concurrencia y seguridad).
-- **me60os**: Capa de memoria Ring 0 para sincronización sub-milisegundo.
-- **GCP**: Vertex AI (Veo 3.0, Gemini 2.0) y Cloud Storage.
-- **Tauri + React**: Panel de control nativo multiplataforma.
-
-## 📄 Licencia
-
-Apache License 2.0 — Construido para que la comunidad open source democratice la IA de contenido de grado profesional.
-
 ---
-*Fenix Swarm - Sentinel Media v1.5.1*
+*Propiedad Privada e Ingeniería de Jaime Novoa. Construido sobre Rust, Matemática Sexagesimal y el Método Científico.*
