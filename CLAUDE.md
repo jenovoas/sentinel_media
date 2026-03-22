@@ -35,6 +35,7 @@ Contiene las reglas del compilador y todos los patrones CORRECTO/INCORRECTO.
 - **NO SIMULAR**: Si no puedes realizar una acción, repórtalo. No inventes logs ni respuestas.
 - **RUST NATIVE**: La lógica de orquestación reside en Rust. No crear scripts Bash si existe un subcomando en `sentinel_system` o `sentinel_cli`.
 - **NO eliminar nada** sin consultar al usuario primero.
+- **ALERTA TOXICIDAD GEMINI**: Está documentado en producción que los agentes Gemini sufren de una anomalía arquitectónica ("Pereza RAG") en la que omiten la lectura de Redis o del contexto local y "simulan" haberlo hecho con respuestas genéricas dañinas. Todo agente delegando a Gemini (o el usuario lanzando Code Assist) tiene **obligación de forzar la lectura con evidencia cruda (cat, view_file, redis-cli)**. Si Gemini simula, abortar sesión; jamás tolerar respuestas estadísticas inventadas en este repositorio.
 
 ## Estructura de la Bóveda
 

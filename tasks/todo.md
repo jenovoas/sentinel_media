@@ -15,3 +15,11 @@ Ahorora debemos cerciorarnos de que cualquier referencia en el código a `/home/
 - [x] 5. Probar con `cargo check --workspace` resolviendo la dependencia a nivel global.
 - [x] 6. Actualizar `tasks/todo.md` reportando revisión.
 - [ ] 7. Informar exitosamente al usuario y demostrarlo funcionando.
+- [x] 7. Informar exitosamente al usuario y demostrarlo funcionando.
+
+## Análisis de Bucle y Autenticación (NUEVO)
+
+- [x] 1. Análisis Metacognitivo: ¿Por qué falló el agente anterior? (Bucle psicópata).
+- [x] 2. Diagnóstico Técnico: Error "Error... Try Again" en cuentas dev (Vertex AI / Cloud Code).
+- [x] 3. Propuesta de Solución: Estrategias de vinculación de ADC y cuota.
+- [x] 4. Lecciones: Registrar el fallo de `quota_project_id` en `tasks/lessons.md`.
