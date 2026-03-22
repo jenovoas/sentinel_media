@@ -73,7 +73,10 @@ async fn run_daemon() -> Result<(), Box<dyn std::error::Error>> {
     let res_agent = ResearchAgent::new("Oracle-Alpha", "/home/jnovoas/Obsidian");
     let fac_agent = FactoryAgent::new(
         "Factory-Alpha",
-        "/home/jnovoas/Obsidian/_Agentes/ready.json",
+        {
+            let prompt_dir = std::env::var("FACTORY_PROMPTS_PATH").unwrap_or_else(|_| "core/prompts".to_string());
+            format!("{}/ready.json", prompt_dir)
+        },
     );
     let sol_agent = obs_agente_rs::solar_agent::SolarAgent::new("Helios-1", "DEMO_KEY");
     

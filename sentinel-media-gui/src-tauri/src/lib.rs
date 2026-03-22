@@ -1,6 +1,9 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+const VAULT_PATH: &str = ".";
+const AGENTS_PATH: &str = ".";
+
 mod s60_math;
 pub use s60_math::Sexagesimal;
 
