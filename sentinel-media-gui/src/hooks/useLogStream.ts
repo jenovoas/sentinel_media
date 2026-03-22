@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { listen } from '@tauri-apps/api/event';
 import { ProcessedLog } from './useDashboardData';
-import { isTauri } from '../utils/isTauri';
 
 const MAX_LOGS = 50; // Buffer circular en UI para proteger memoria
 
@@ -21,8 +20,6 @@ export const useLogStream = (initialLogs: ProcessedLog[] = []) => {
     }, [initialLogs]);
 
     useEffect(() => {
-        if (!isTauri()) return;
-
         const unlisten = listen<ProcessedLog>('sys-log', (event) => {
             const newLog = event.payload;
 

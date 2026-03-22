@@ -5,6 +5,13 @@
 
 > **Aviso para Contribuidores / IA**: Si buscas las reglas operativas de IA o Los 5 Axiomas Inmutables que rigen moral y tácticamente el proyecto, el mapa cognitivo se ha reubicado en `vault/_Agentes/ANTIGRAVITY_CONTEXT.md` como Prompt del Sistema maestro.
 
+## 🖼️ Interfaz de Control (Sentinel Media GUI)
+
+La interfaz de usuario es un centro de mando unificado construido con **Tauri v2**, **React** y **Framer Motion**, permitiendo la monitorización en tiempo real de todo el enjambre.
+
+![Dashboard Principal](docs/img/dashboard_main.webp)
+*Dashboard principal mostrando el estado del sistema, costos operativos y logs de telemetría.*
+
 ## 🏗️ Jerarquía de Verdad (SSOT)
 
 La toma de decisiones del Cortex se basa en un flujo sagrado de ingesta:
@@ -41,6 +48,16 @@ El sistema utiliza una arquitectura modular donde cada crate representa un agent
 | `liquid_sim` | Simulador de sinapsis líquidas | ✅ Compila |
 | `sentinel-vault-agent` | Agente principal en Rust | ✅ Compila |
 | `sentinel-media-gui` | GUI Tauri (Rust + React) de monitoreo | ✅ Compila |
+
+### 🏭 Operatividad de la Fábrica
+El pipeline de producción automatizado permite escanear la bóveda, orquestar agentes de generación y supervisar el renderizado de activos en tiempo real.
+
+![Factory Pipeline](docs/img/factory_pipeline.webp)
+
+### 📚 Gestión de la Bóveda y Editor
+Sentinel Media incluye un editor de biblioteca integrado para manipular el conocimiento (SSOT) directamente, permitiendo a los agentes de IA analizar, traducir e ingestar documentos Markdown.
+
+![Library Editor](docs/img/library_editor.webp)
 
 ## 🔧 Compilación y Requisitos Técnicos
 

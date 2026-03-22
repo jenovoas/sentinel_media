@@ -14,7 +14,6 @@ import {
     MoreHorizontal
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { isTauri } from '../utils/isTauri';
 
 interface AgentStatus {
     name: string;
@@ -47,16 +46,6 @@ const SwarmView: React.FC = () => {
     const [actionLoading, setActionLoading] = useState<string | null>(null);
 
     const fetchData = async () => {
-        if (!isTauri()) {
-            setAgents([
-                { name: 'Cortex Core', state: 'Idle', description: 'Núcleo principal del sistema', binary: 'cortex', agent_type: 'cortex' },
-                { name: 'Research Agent', state: 'Idle', description: 'Agente de investigación profunda', binary: 'research', agent_type: 'research' },
-                { name: 'Nervio Sentinel', state: 'Offline', description: 'Monitor de seguridad eBPF', binary: 'nervio', agent_type: 'nervio' },
-            ]);
-            setStats({ swarm_load: 0, nervios_sync: false });
-            setLoading(false);
-            return;
-        }
         try {
             const resAgents = await invoke<AgentStatus[]>('get_agentes');
             const resStats = await invoke<CortexStats>('get_estadisticas_cortex');

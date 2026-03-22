@@ -104,6 +104,7 @@ async fn factory_pipeline(args: &FactoryArgs) -> Result<()> {
             openai: args.provider == "openai",
             perplexity: args.provider == "perplexity",
             antigravity: false,
+            target: "youtube".to_string(),
         };
         
         match research(research_args).await {

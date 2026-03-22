@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { invoke } from '@tauri-apps/api/core';
-import { isTauri } from '../utils/isTauri';
 
 // === Senior Engineering Patterns: Robust Frontend Types ===
 
@@ -75,37 +74,6 @@ export const useDashboardData = (pollInterval: number = 5000) => {
 
     const fetchData = useCallback(async () => {
         try {
-            if (!isTauri()) {
-                console.warn("⚠️ Browser Mode Detected: Using Mock Data");
-                setState({
-                    status: 'success',
-                    data: {
-                        operations: [],
-                        stats: {
-                            cpu_usage: 15,
-                            memory_used: 8000,
-                            memory_total: 16000,
-                            uptime: 12345,
-                            firewall_active: true,
-                            logs_total: 100,
-                            kernel_version: 'Browser Mock Kernel',
-                            claims: [],
-                            cpu_temp: 40
-                        },
-                        systemLogs: [
-                            { message: "Sistema Sentinel iniciado en modo MOCK", severity: 'Info', timestamp: Date.now() / 1000 },
-                            { message: "Temperatura GPU simulada normal", severity: 'HardwareAlert', timestamp: (Date.now() / 1000) - 10 },
-                            { message: "Simulando advertencia de memoria", severity: 'Warning', timestamp: (Date.now() / 1000) - 20 }
-                        ],
-                        gpuStatus: { status: 'Active', data: { temp: 45, usage: 30, memory: '4096 / 8192' } },
-                        cpuTemp: 40,
-                        activeAgents: [],
-                        factoryStatus: { running: false, pid: null }
-                    }
-                });
-                return;
-            }
-
             const opsPromise = invoke<OpEntry[]>('get_operaciones').catch(e => {
                 console.error("❌ Error fetching Operations:", e);
                 return [];

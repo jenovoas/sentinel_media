@@ -1,195 +1,123 @@
 // src/factory_agent.rs
-//! 🏭 ME-60OS: RESONANT FACTORY AGENT (RUST) 🏭
+//! 🏭 Sentinel Vault: FACTORY AGENT (RUST) 🏭
 //! ---------------------------------------------------------------------------
-//! Maneja el pipeline de producción de YouTube sincronizado a 41Hz.
+//! Orquestador del pipeline de producción y marketing.
 
-use sentinel_memory::{CandleEmbedder, VectorStore};
-// use me60os_core::agent_manager::AgentSPA;
-// use me60os_core::cortex::CortexEngine;
-// use me60os_core::spa::SPA;
+use anyhow::Result;
+use colored::Colorize;
 use serde_json::Value;
 use std::fs;
 use std::path::PathBuf;
+use crate::research_agent::{ResearchAgent, ResearchTask};
 
-/*
 pub struct FactoryAgent {
-    name: String,
-    queue_file: String,
-    system_prompt_dir: String,
-    system_prompt: String,   // Default/Cache
-    current_persona: String, // Persona actual cargada
-    current_load: SPA,
-    is_busy: bool,
-    // Neural Memory
-    memory_store: Option<VectorStore>,
-    embedder: Option<CandleEmbedder>,
+    pub name: String,
+    pub queue_file: String,
+    pub is_busy: bool,
+    pub research_agent: ResearchAgent,
 }
 
 impl FactoryAgent {
-    pub fn new(name: &str, queue_file: &str) -> Self {
-        println!("🧠 [Factory] Loading Neural Memory (Candle)...");
-        let home = std::env::var("HOME").unwrap_or_else(|_| ".".to_string());
-        let db_path = PathBuf::from(format!("{}/.sentinel_memory.json", home));
-
-        let store = VectorStore::load(&db_path).ok();
-        let embedder = CandleEmbedder::new().ok();
-
-        if store.is_some() && embedder.is_some() {
-            println!("✅ [Factory] Neural Memory Attached.");
-        } else {
-            println!("⚠️ [Factory] Memory load failed. Running in Lobotomy Mode.");
-        }
-
-        // Directorio de Prompts
-        let prompt_dir = std::env::var("FACTORY_PROMPTS_PATH").unwrap_or_else(|_| "core/prompts".to_string());
-        let default_prompt_path = format!("{}/youtube_architect.md", prompt_dir);
-        let sys_prompt = fs::read_to_string(&default_prompt_path)
-            .unwrap_or_else(|_| "You are a helpful AI.".to_string());
-
+    pub fn new(name: &str, queue_file: &str, vault_path: &str) -> Self {
         Self {
             name: name.to_string(),
             queue_file: queue_file.to_string(),
-            system_prompt_dir: prompt_dir.to_string(),
-            system_prompt: sys_prompt,
-            current_persona: "youtube_architect".to_string(),
-            current_load: SPA::zero(),
             is_busy: false,
-            memory_store: store,
-            embedder,
+            research_agent: ResearchAgent::new(&format!("{}-Research", name), vault_path),
         }
     }
 
-    /// Lee la cola de tareas (ready.json)
-    fn check_queue(&self) -> bool {
+    /// Revisa la cola de tareas (ready.json)
+    pub async fn tick(&mut self) -> Result<()> {
+        if self.is_busy {
+            return Ok(());
+        }
+
         if let Ok(content) = fs::read_to_string(&self.queue_file) {
             if let Ok(json) = serde_json::from_str::<Value>(&content) {
                 if let Some(tasks) = json.as_array() {
-                    return !tasks.is_empty();
-                }
-            }
-        }
-        false
-    }
-
-    fn query_memory(&mut self, topic: &str) -> String {
-        if let (Some(store), Some(embedder)) = (&self.memory_store, &mut self.embedder) {
-            if let Ok(vec) = embedder.embed(topic) {
-                // Buscamos los 5 fragmentos más relevantes para tener buen contexto
-                let results = store.search(&vec, 5);
-                let context: Vec<String> =
-                    results.iter().map(|(doc, _)| doc.content.clone()).collect();
-                return context.join("\n\n---\n\n");
-            }
-        }
-        "NO_MEMORY_CONTEXT".to_string()
-    }
-}
-
-impl AgentSPA for FactoryAgent {
-    fn name(&self) -> &str {
-        &self.name
-    }
-
-    fn percibir(&mut self, cortex: &CortexEngine) -> bool {
-        // Recargar prompt actual si cambia (Hot Reloading)
-        let tick_raw = cortex.time.to_raw();
-        if (tick_raw % 120) == 0 {
-            // Cada ~3 segs
-            let current_path = format!("{}/{}.md", self.system_prompt_dir, self.current_persona);
-            if let Ok(new_prompt) = fs::read_to_string(&current_path) {
-                if new_prompt != self.system_prompt {
-                    self.system_prompt = new_prompt;
-                    println!("🎭 [Factory] Persona '{}' Updated!", self.current_persona);
-                }
-            }
-        }
-
-        self.current_load = cortex.total_energy;
-        let has_tasks = self.check_queue();
-        let high_load = SPA::new(2, 0, 0, 0, 0);
-
-        if self.current_load < high_load {
-            // Leer Control State para forzar/cancelar
-            let control_path = std::env::var("CORTEX_CONTROL_PATH").unwrap_or_else(|_| "/tmp/cortex_control.json".to_string());
-            if let Ok(content) = std::fs::read_to_string(control_path) {
-                if let Ok(state) =
-                    serde_json::from_str::<crate::control_agent::ControlState>(&content)
-                {
-                    if !state.factory_queue {
-                        return false;
+                    if !tasks.is_empty() {
+                        println!("🏭 [{}] Tareas detectadas en la cola. Iniciando Enjambre...", self.name.green().bold());
+                        self.process_next_task(tasks).await?;
                     }
                 }
             }
-            self.is_busy = false;
-            return has_tasks;
         }
-        false
+        Ok(())
     }
 
-    fn decidir(&mut self) -> String {
-        let nominal = SPA::new(1, 0, 0, 0, 0);
-        if self.current_load >= nominal {
-            "TRIGGER_RESONANT_PRODUCTION".to_string()
-        } else {
-            "IDLE_WAITING_FOR_RESONANCE".to_string()
+    async fn process_next_task(&mut self, tasks: &[Value]) -> Result<()> {
+        if let Some(first_task) = tasks.first() {
+            let title = first_task["title"].as_str().unwrap_or("Untitled");
+            let file_path = first_task["rel_path"].as_str().map(PathBuf::from);
+
+            println!("🚀 [Factory] Procesando: {}", title.yellow());
+
+            // 1. Fase de Guion (YouTube)
+            let yt_task = ResearchTask {
+                topic: title.to_string(),
+                file_path: file_path.clone(),
+                target: "youtube".to_string(),
+            };
+            let script = self.research_agent.solve_task(&yt_task).await?;
+            let _ = fs::write("/tmp/last_video_script.md", &script);
+            println!("✅ [Factory] Guion de YouTube generado.");
+
+            // 2. Fase de Marketing (Community Manager Poderes)
+            println!("📣 [Factory] Iniciando Campaña de Marketing Digital...");
+            
+            // X-Thread
+            let x_task = ResearchTask {
+                topic: format!("Crea un hilo viral sobre: {}", title),
+                file_path: file_path.clone(),
+                target: "x-thread".to_string(),
+            };
+            let x_thread = self.research_agent.solve_task(&x_task).await?;
+            let _ = fs::write("/tmp/last_x_thread.md", &x_thread);
+            println!("🐦 [Factory] Hilo de X (Twitter) preparado.");
+
+            // LinkedIn
+            let li_task = ResearchTask {
+                topic: format!("Escribe un post profesional para líderes técnicos sobre: {}", title),
+                file_path: file_path.clone(),
+                target: "linkedin".to_string(),
+            };
+            let li_post = self.research_agent.solve_task(&li_task).await?;
+            let _ = fs::write("/tmp/last_linkedin_post.md", &li_post);
+            println!("🏢 [Factory] Post de LinkedIn preparado.");
+
+            // Facebook
+            let fb_task = ResearchTask {
+                topic: format!("Escribe un post inspirador para Facebook sobre: {}", title),
+                file_path: file_path.clone(),
+                target: "facebook_visionary".to_string(),
+            };
+            let fb_post = self.research_agent.solve_task(&fb_task).await?;
+            let _ = fs::write("/tmp/last_facebook_post.md", &fb_post);
+            println!("👥 [Factory] Post de Facebook preparado.");
+
+            // Instagram
+            let ig_task = ResearchTask {
+                topic: format!("Crea una estructura de carrusel/reel para Instagram sobre: {}", title),
+                file_path: file_path.clone(),
+                target: "instagram_storyteller".to_string(),
+            };
+            let ig_post = self.research_agent.solve_task(&ig_task).await?;
+            let _ = fs::write("/tmp/last_instagram_post.md", &ig_post);
+            println!("📸 [Factory] Contenido de Instagram preparado.");
+
+            // TikTok
+            let tk_task = ResearchTask {
+                topic: format!("Escribe un guion rápido para TikTok sobre: {}", title),
+                file_path: file_path.clone(),
+                target: "tiktok_trendsetter".to_string(),
+            };
+            let tk_script = self.research_agent.solve_task(&tk_task).await?;
+            let _ = fs::write("/tmp/last_tiktok_script.md", &tk_script);
+            println!("📱 [Factory] Guion de TikTok preparado.");
+
+            println!("{}", "✨ ¡Campaña Multicanal Generada con Éxito! ✨".green().bold());
         }
-    }
-
-    fn actuar(&mut self, action: String) {
-        if action == "TRIGGER_RESONANT_PRODUCTION" {
-            println!(
-                "🏭 [FACTORY:{}] Resonancia detectada. Iniciando producción...",
-                self.name
-            );
-
-            if let Ok(content) = fs::read_to_string(&self.queue_file) {
-                if let Ok(json) = serde_json::from_str::<Value>(&content) {
-                    if let Some(tasks) = json.as_array() {
-                        if let Some(first_task) = tasks.first() {
-                            let topic = first_task["title"]
-                                .as_str()
-                                .or_else(|| first_task["rel_path"].as_str())
-                                .unwrap_or("Untitled");
-
-                            let channel = first_task["channel"]
-                                .as_str()
-                                .unwrap_or("youtube_architect");
-
-                            // Si el canal cambió, cargamos la nueva personalidad
-                            if channel != self.current_persona {
-                                let new_path = format!("{}/{}.md", self.system_prompt_dir, channel);
-                                if let Ok(new_prompt) = fs::read_to_string(&new_path) {
-                                    self.system_prompt = new_prompt;
-                                    self.current_persona = channel.to_string();
-                                    println!("🎭 [Factory] Switched to Persona: '{}'", channel);
-                                }
-                            }
-
-                            println!(
-                                "🧠 [Factory] Consultando Oráculo ({}) sobre: '{}'",
-                                self.current_persona, topic
-                            );
-                            let memory_context = self.query_memory(topic);
-
-                            println!("📝 [Factory] Ensamblando Super-Prompt para {}...", channel);
-
-                            let final_prompt = format!(
-                                "SYSTEM (PERSONA: {}):\n{}\n\nCONTEXTO DE LA BÓVEDA (MEMORIA):\n{}\n\nTAREA ACTUAL:\nGenerar contenido para {} sobre: {}",
-                                self.current_persona,
-                                self.system_prompt,
-                                memory_context,
-                                channel,
-                                topic
-                            );
-
-                            let _ = fs::write("/tmp/last_factory_prompt.txt", &final_prompt);
-                            println!("✨ Prompt generado en /tmp/last_factory_prompt.txt. Listo para inferencia.");
-                        }
-                    }
-                }
-            }
-            self.is_busy = true;
-        }
+        Ok(())
     }
 }
-*/

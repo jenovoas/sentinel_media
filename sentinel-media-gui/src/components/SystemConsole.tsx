@@ -8,7 +8,6 @@ import {
     Crosshair
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { isTauri } from '../utils/isTauri';
 
 interface ClaimStatus {
     name: string;
@@ -35,16 +34,6 @@ const SystemConsole: React.FC = () => {
     const [logs, setLogs] = useState<string[]>([]);
 
     const fetchData = async () => {
-        if (!isTauri()) {
-            setStats({
-                cpu_usage: 12.4, memory_used: 7200, memory_total: 16000,
-                uptime: 12345, firewall_active: true, logs_total: 42,
-                kernel_version: 'Linux 6.18.18-lts', swarm_load: 0.0,
-                nervios_sync: false, claims: [],
-            });
-            setLogs(['[MOCK] Sistema iniciado en modo browser', '[MOCK] Telemetría simulada activa']);
-            return;
-        }
         try {
             const resStats = await invoke<CortexStats>('get_estadisticas_cortex');
             const rawLogs = await invoke<{ message: string; severity: string; timestamp: number }[]>('get_logs_sistema', { count: 20 });

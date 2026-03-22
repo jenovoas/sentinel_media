@@ -27,7 +27,8 @@ pub fn scan_directory(path: &Path) -> Result<Vec<VideoFile>, String> {
             if path.is_file() {
                 if let Some(extension) = path.extension() {
                     let ext_str = extension.to_string_lossy().to_lowercase();
-                    if ext_str == "mp4" || ext_str == "mov" || ext_str == "mkv" {
+                    if ext_str == "mp4" || ext_str == "mov" || ext_str == "mkv" || 
+                       ext_str == "md" || ext_str == "txt" || ext_str == "yaml" {
                         let metadata = fs::metadata(&path).map_err(|e| e.to_string())?;
                         let created = metadata
                             .created()

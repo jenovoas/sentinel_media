@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { listen } from '@tauri-apps/api/event';
 import { HardwareStatus } from './useDashboardData';
-import { isTauri } from '../utils/isTauri';
 
 /**
  * Hook reactivo para métricas de GPU.
@@ -19,8 +18,6 @@ export const useGpuStream = (initialStatus: HardwareStatus | null) => {
     }, [initialStatus]);
 
     useEffect(() => {
-        if (!isTauri()) return;
-
         // Suscripción al canal de eventos
         const unlisten = listen<HardwareStatus>('gpu-metrics', (event) => {
             console.log('🔥 GPU Update:', event.payload);

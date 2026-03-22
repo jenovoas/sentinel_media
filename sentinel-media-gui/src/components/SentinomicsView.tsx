@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { motion } from 'framer-motion';
-import { isTauri } from '../utils/isTauri';
 import {
     TrendingUp,
     DollarSign,
@@ -76,24 +75,6 @@ const SentinomicsView: React.FC = () => {
 
     const fetchData = async () => {
         setLoading(true);
-        if (!isTauri()) {
-            setData({
-                total_today: 0.42, total_this_month: 8.17, total_all_time: 23.50,
-                total_revenue_today: 0, total_revenue_this_month: 0, total_revenue_all_time: 0,
-                global_roi_index: 0,
-                daily_budget_usage_pct: 4.2, monthly_budget_usage_pct: 2.7,
-                by_provider: {
-                    gemini: { today: 0.32, avg_cost_per_request: 0.001, avg_efficiency_score: 0.95, hardware_overhead_factor: 1.0 },
-                    groq:   { today: 0.10, avg_cost_per_request: 0.0005, avg_efficiency_score: 0.88, hardware_overhead_factor: 1.0 },
-                },
-                active_assets_count: 3,
-                smart_advice: ['Modo browser activo — datos simulados', 'Conecta Tauri para datos reales'],
-            });
-            setCostProjection({ projected_daily: 0.50, projected_monthly: 15.0, trend: 'stable' });
-            setGpuStatus('MOCK GPU');
-            setLoading(false);
-            return;
-        }
         try {
             const result = await invoke<CostSummary>('get_resumen_costos');
             setData(result);

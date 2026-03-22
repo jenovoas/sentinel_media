@@ -22,6 +22,7 @@ const VaultView: React.FC = () => {
     const [search, setSearch] = useState('');
     const [selectedFile, setSelectedFile] = useState<VaultFile | null>(null);
     const [fileContent, setFileContent] = useState<string>('');
+    const [isEditing, setIsEditing] = useState(false);
     const [toast, setToast] = useState<{ type: 'ok' | 'error'; msg: string } | null>(null);
 
     const showToast = (type: 'ok' | 'error', msg: string) => {
@@ -63,6 +64,23 @@ const VaultView: React.FC = () => {
                 </div>
 
                 <div className="flex gap-4">
+                    <button
+                        onClick={async () => {
+                            const nombre = prompt("Nombre del nuevo archivo:");
+                            if (nombre) {
+                                try {
+                                    await invoke<string>('crear_nuevo_archivo_sentinel_media', { nombre });
+                                    showToast('ok', `Archivo creado: ${nombre}`);
+                                    fetchFiles();
+                                } catch (e) {
+                                    showToast('error', String(e));
+                                }
+                            }
+                        }}
+                        className="px-6 py-4 rounded-2xl bg-sentinel-blue/10 border border-sentinel-blue/20 text-sentinel-blue font-black text-[10px] uppercase tracking-widest hover:bg-sentinel-blue hover:text-cyber-dark transition-all"
+                    >
+                        + Nuevo Archivo
+                    </button>
                     <div className="relative group">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-sentinel-blue transition-colors" size={18} />
                         <input
@@ -138,12 +156,49 @@ const VaultView: React.FC = () => {
                                     <FileText size={16} className="text-sentinel-blue" />
                                     <h2 className="text-[10px] font-black uppercase tracking-widest text-white/60">{selectedFile.name}</h2>
                                 </div>
-                                <button
-                                    onClick={() => setSelectedFile(null)}
-                                    className="p-2 hover:bg-white/5 rounded-xl text-white/20 hover:text-white transition-all"
-                                >
-                                    <ArrowUpRight size={14} className="rotate-45" />
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    {!isEditing ? (
+                                        <button
+                                            onClick={() => setIsEditing(true)}
+                                            className="px-3 py-1.5 bg-sentinel-blue/10 hover:bg-sentinel-blue/20 rounded-lg text-[9px] font-black uppercase transition-all"
+                                        >
+                                            Editar
+                                        </button>
+                                    ) : (
+                                        <>
+                                            <button
+                                                onClick={async () => {
+                                                    try {
+                                                        await invoke('guardar_contenido_archivo_sentinel_media', { path: selectedFile.path, content: fileContent });
+                                                        showToast('ok', 'Archivo guardado');
+                                                        setIsEditing(false);
+                                                        fetchFiles();
+                                                    } catch (e) {
+                                                        showToast('error', String(e));
+                                                    }
+                                                }}
+                                                className="px-3 py-1.5 bg-sentinel-green/20 hover:bg-sentinel-green/30 text-sentinel-green rounded-lg text-[9px] font-black uppercase transition-all"
+                                            >
+                                                Guardar
+                                            </button>
+                                            <button
+                                                onClick={() => setIsEditing(false)}
+                                                className="px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-[9px] font-black uppercase transition-all"
+                                            >
+                                                Cancelar
+                                            </button>
+                                        </>
+                                    )}
+                                    <button
+                                        onClick={() => {
+                                            setSelectedFile(null);
+                                            setIsEditing(false);
+                                        }}
+                                        className="p-2 hover:bg-white/5 rounded-xl text-white/20 hover:text-white transition-all"
+                                    >
+                                        <ArrowUpRight size={14} className="rotate-45" />
+                                    </button>
+                                </div>
                             </header>
                             <div className="p-6 border-b border-white/5 flex gap-2">
                                 <button
@@ -186,7 +241,21 @@ const VaultView: React.FC = () => {
                                     Ingestar
                                 </button>
                             </div>
-                            <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">\n                                <pre className="text-[11px] font-mono text-white/40 whitespace-pre-wrap leading-relaxed">\n                                    {fileContent}\n                                </pre>
+                            <div className="flex-1 overflow-hidden p-8 flex flex-col">
+                                {isEditing ? (
+                                    <textarea
+                                        value={fileContent}
+                                        onChange={(e) => setFileContent(e.target.value)}
+                                        className="flex-1 w-full bg-transparent border-none outline-none text-[12px] font-mono text-white/60 leading-relaxed resize-none custom-scrollbar"
+                                        spellCheck={false}
+                                    />
+                                ) : (
+                                    <div className="flex-1 overflow-y-auto custom-scrollbar">
+                                        <pre className="text-[11px] font-mono text-white/40 whitespace-pre-wrap leading-relaxed">
+                                            {fileContent}
+                                        </pre>
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     )}

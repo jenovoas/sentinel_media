@@ -15,7 +15,6 @@ import {
     Hourglass,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { isTauri } from '../utils/isTauri';
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -45,6 +44,13 @@ interface ProductionStats {
     videos_ready_for_stitch: number;
     avg_generation_time_mins: number;
     active_vertex_projects: string[];
+}
+
+interface MarketingAsset {
+    platform: string;
+    path: string;
+    exists: boolean;
+    content: string;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -105,7 +111,7 @@ const PHASE_CONFIG = [
 function assignPhase(op: OpEntry): string {
     const s = op.status;
     for (const phase of PHASE_CONFIG) {
-        if ((phase.statuses as readonly string[]).some(ps => s.startsWith(ps))) {
+        if ((phase.statuses as readonly string[]).some(ps => s.toLowerCase().startsWith(ps.toLowerCase()))) {
             return phase.key;
         }
     }
@@ -117,8 +123,10 @@ function basename(path: string): string {
 }
 
 function opIcon(op: OpEntry) {
-    if (op.op_type === 'stitch') return <Film size={12} className="flex-shrink-0" />;
-    if (op.op_type === 'generate_short') return <FileVideo size={12} className="flex-shrink-0" />;
+    const type = op.op_type.toLowerCase();
+    if (type.includes('stitch')) return <Film size={12} className="flex-shrink-0" />;
+    if (type.includes('video')) return <FileVideo size={12} className="flex-shrink-0" />;
+    if (type.includes('upload')) return <RefreshCw size={12} className="flex-shrink-0 text-sentinel-blue" />;
     return <FileText size={12} className="flex-shrink-0" />;
 }
 
@@ -201,43 +209,26 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({ phase, ops }) => {
 
 // ─── Vista Principal ──────────────────────────────────────────────────────────
 
-const MOCK_OPS: OpEntry[] = [
-    { id: '1', status: 'Running', target_file: '/vault/video_gen.md', op_type: 'generate_short', engine: 'gemini-2.0', progress_pct: 42 },
-    { id: '2', status: 'Pending', target_file: '/vault/tutorial_largo.md', op_type: 'generate_long', engine: null, progress_pct: 0 },
-    { id: '3', status: 'Done', target_file: '/vault/short_001_gen.mp4', op_type: 'stitch', engine: null, progress_pct: 100 },
-    { id: '4', status: 'Failed', target_file: '/vault/short_002_gen.mp4', op_type: 'generate_short', engine: null, progress_pct: 0 },
-];
-
-const MOCK_STATS: ProductionStats = {
-    total_operations: 4, pending: 1, running: 1, completed: 1, failed: 1,
-    videos_ready_for_stitch: 0, avg_generation_time_mins: 12.5,
-    active_vertex_projects: ['sentinel-prod'],
-};
-
 const ProductionView: React.FC = () => {
     const [ops, setOps] = useState<OpEntry[]>([]);
     const [stats, setStats] = useState<ProductionStats | null>(null);
     const [vaultFiles, setVaultFiles] = useState<VaultFile[]>([]);
+    const [marketingAssets, setMarketingAssets] = useState<MarketingAsset[]>([]);
     const [loading, setLoading] = useState(true);
     const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
     const load = useCallback(async () => {
-        if (!isTauri()) {
-            setOps(MOCK_OPS);
-            setStats(MOCK_STATS);
-            setVaultFiles([]);
-            setLoading(false);
-            return;
-        }
         try {
-            const [rawOps, rawStats, rawVault] = await Promise.all([
+            const [rawOps, rawStats, rawVault, rawMarketing] = await Promise.all([
                 invoke<OpEntry[]>('get_operaciones').catch(() => []),
                 invoke<ProductionStats>('get_estadisticas_fabrica').catch(() => null),
                 invoke<VaultFile[]>('get_archivos_sentinel_media').catch(() => []),
+                invoke<MarketingAsset[]>('get_marketing_assets').catch(() => []),
             ]);
             setOps(rawOps);
             setStats(rawStats);
             setVaultFiles(rawVault);
+            setMarketingAssets(rawMarketing);
             setLastRefresh(new Date());
         } finally {
             setLoading(false);
@@ -256,7 +247,9 @@ const ProductionView: React.FC = () => {
     );
     ops.forEach(op => {
         const key = assignPhase(op);
-        byPhase[key].push(op);
+        if (byPhase[key]) {
+            byPhase[key].push(op);
+        }
     });
 
     // Archivos sin operación activa
@@ -334,13 +327,46 @@ const ProductionView: React.FC = () => {
                     ))}
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                     {PHASE_CONFIG.map((phase) => (
                         <KanbanColumn
                             key={phase.key}
                             phase={phase}
                             ops={byPhase[phase.key] ?? []}
                         />
+                    ))}
+                </div>
+            </section>
+
+            {/* ESTRATEGIA SOCIAL (NEW) */}
+            <section>
+                <div className="flex items-center gap-3 mb-6">
+                    <RefreshCw size={14} className="text-sentinel-green" />
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">
+                        Estrategia Social (Enjambre v2)
+                    </h2>
+                    <div className="flex-1 h-px bg-white/5" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    {marketingAssets.map((asset) => (
+                        <div 
+                            key={asset.platform}
+                            className={`p-5 rounded-[2rem] border transition-all ${asset.exists ? 'bg-sentinel-green/[0.03] border-sentinel-green/20' : 'bg-white/[0.02] border-white/5 opacity-40'}`}
+                        >
+                            <div className="flex justify-between items-start mb-4">
+                                <span className={`text-[10px] font-black uppercase tracking-widest ${asset.exists ? 'text-sentinel-green' : 'text-white/20'}`}>
+                                    {asset.platform}
+                                </span>
+                                {asset.exists && <CheckCircle size={10} className="text-sentinel-green" />}
+                            </div>
+                            <p className="text-[9px] font-mono text-white/40 mb-2 truncate">
+                                {asset.exists ? basename(asset.path) : 'Pendiente...'}
+                            </p>
+                            <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                                <div className={`h-full ${asset.exists ? 'bg-sentinel-green w-full' : 'w-0'}`} />
+                            </div>
+                        </div>
                     ))}
                 </div>
             </section>

@@ -1,12 +1,13 @@
 use anyhow::{Context, Result};
 use clap::Parser;
 use reqwest::Client;
+use colored::*;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::process::Command;
 use std::path::PathBuf;
 use serde_json::json;
-use sentinel_core::{load_agent_skill, FactoryConfig};
+use sentinel_core::FactoryConfig;
 
 pub mod telos_indexer;
 pub mod rate_limiter;
@@ -46,6 +47,8 @@ pub struct Args {
     pub openai: bool,
     #[arg(long)]
     pub antigravity: bool,
+    #[arg(long, default_value = "youtube")]
+    pub target: String,
     #[arg(long)]
     pub perplexity: bool,
     #[arg(long)]
@@ -157,13 +160,22 @@ pub async fn run(args: Args) -> Result<String> {
             .with_context(|| format!("No se pudo leer el archivo: {}", file_path))?;
     }
 
-    let system_msg = "Eres Sentinel Media - Assistant. Genera un guion para un video de YouTube basado en el contenido proporcionado. El guion debe ser profesional, atractivo y seguir una estructura clara.";
+    let prompt_file = match args.target.as_str() {
+        "x-thread" => "x_evangelist.md",
+        "linkedin" => "linkedin_architect.md",
+        _ => "youtube_architect.md",
+    };
+
+    let prompt_path = format!("vault/_Agentes/prompts/{}", prompt_file);
+    let system_msg = fs::read_to_string(&prompt_path)
+        .unwrap_or_else(|_| "Eres Sentinel Media - Assistant. Genera contenido técnico denso y profesional.".to_string());
+
     let user_msg = if let Some(ref p) = args.prompt {
         format!("INSTRUCCIÓN: {}\n\nCONTENIDO:\n{}", p, input_content)
     } else {
         input_content
     };
 
-    println!("🚀 Generando investigación con Gemini 2.0 Flash...");
+    println!("🚀 Generando investigación para {} con Gemini 2.0 Flash...", args.target.cyan());
     research.synthesize_vertex(&config, &system_msg, &user_msg).await
 }

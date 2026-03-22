@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { motion, AnimatePresence } from 'framer-motion';
-import { isTauri } from '../utils/isTauri';
 import {
     Brain,
     Save,
@@ -32,17 +31,6 @@ const CognitiveLayer: React.FC = () => {
 
     const fetchPrompts = async () => {
         setLoading(true);
-        if (!isTauri()) {
-            const mockList = [
-                { name: 'Antigravity', filename: 'antigravity.md', path: '/mock/antigravity.md' },
-                { name: 'Cortex Core', filename: 'cortex.md', path: '/mock/cortex.md' },
-            ];
-            setPrompts(mockList);
-            setSelectedPrompt(mockList[0]);
-            setContent('# Antigravity (MOCK)\n\nPersonalidad simulada en modo browser.');
-            setLoading(false);
-            return;
-        }
         try {
             const list = await invoke<SystemPromptInfo[]>('get_prompts_sistema');
             setPrompts(list);
@@ -60,11 +48,6 @@ const CognitiveLayer: React.FC = () => {
     const handleSelectPrompt = async (prompt: SystemPromptInfo) => {
         setSelectedPrompt(prompt);
         setLoading(true);
-        if (!isTauri()) {
-            setContent(`# ${prompt.name} (MOCK)\n\nContenido simulado en modo browser.`);
-            setLoading(false);
-            return;
-        }
         try {
             const data = await invoke<string>('leer_prompt_sistema', { filename: prompt.filename });
             setContent(data);

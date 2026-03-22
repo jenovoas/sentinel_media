@@ -244,8 +244,8 @@ const FactoryView: React.FC = () => {
 
     // Filtro optimizado por fases
     const conceptFiles = vaultFiles.slice(0, 10);
-    const generatingOps = ops.filter(o => (o.status === 'Running' || o.status === 'Pending') && o.op_type.startsWith('generate'));
-    const processingOps = ops.filter(o => (o.status === 'Running' || o.status === 'Pending') && o.op_type === 'stitch');
+    const generatingOps = ops.filter(o => (o.status.toLowerCase().includes('running') || o.status.toLowerCase().includes('pending')) && o.op_type.toLowerCase().includes('generation'));
+    const processingOps = ops.filter(o => (o.status.toLowerCase().includes('running') || o.status.toLowerCase().includes('pending')) && o.op_type.toLowerCase().includes('stitch'));
     const publishedOps = ops.filter(o => o.status === 'Completed' || o.status === 'Done');
     const recentOps = ops.slice(0, 5);
 
