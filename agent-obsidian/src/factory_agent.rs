@@ -3,7 +3,7 @@
 //! ---------------------------------------------------------------------------
 //! Maneja el pipeline de producción de YouTube sincronizado a 41Hz.
 
-use sentinel_media_memory::{CandleEmbedder, VectorStore};
+use sentinel_memory::{CandleEmbedder, VectorStore};
 // use me60os_core::agent_manager::AgentSPA;
 // use me60os_core::cortex::CortexEngine;
 // use me60os_core::spa::SPA;

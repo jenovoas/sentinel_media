@@ -1,5 +1,5 @@
 [package]
-name = "sentinel_media_memory"
+name = "sentinel_memory"
 version = "0.1.0"
 edition = "2021"
 

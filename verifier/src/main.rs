@@ -3,7 +3,7 @@ use clap::Parser;
 use colored::Colorize;
 use std::path::Path;
 use regex::Regex;
-use sentinel_media_core::load_agent_skill;
+use sentinel_core::load_agent_skill;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about = "Sentinel Forensic Verifier (Rust Native)")]

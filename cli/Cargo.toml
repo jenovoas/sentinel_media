@@ -1,5 +1,5 @@
 [package]
-name = "sentinel_media_cli"
+name = "sentinel"
 version = "0.1.0"
 edition = "2021"
 
@@ -21,8 +21,8 @@ sysinfo = "0.38.0"
 rand = "0.8"
 ratatui = "0.30.0"
 crossterm = "0.29.0"
-sentinel_media_core = { path = "../sentinel_media_core" }
-sentinel_media_scanner = { path = "../sentinel_media_scanner" }
-sentinel_media_research = { path = "../sentinel_media_research" }
-sentinel_media_media = { path = "../sentinel_media_media" }
-sentinel_media_publisher = { path = "../sentinel_media_publisher" }
+sentinel_core = { path = "../core" }
+sentinel_scanner = { path = "../scanner" }
+sentinel_research = { path = "../research" }
+sentinel_media = { path = "../media" }
+sentinel_publisher = { path = "../publisher" }

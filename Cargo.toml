@@ -12,6 +12,7 @@ members = [
     "system",
     "agent-obsidian",
     "sentinel-media-gui/src-tauri",
+    "libs/me60os-ring0",
 ]
 
 # NOTA: Los directorios 'sentinel-media-gui' (Tauri) y 'sentinel-media-remotion' (Node.js) 

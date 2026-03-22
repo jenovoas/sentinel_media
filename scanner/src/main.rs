@@ -1,5 +1,5 @@
 use clap::Parser;
-use sentinel_media_scanner::{run, Args};
+use sentinel_scanner::{run, Args};
 
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();

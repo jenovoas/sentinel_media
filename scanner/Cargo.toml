@@ -1,14 +1,14 @@
 [package]
-name = "sentinel_media_scanner"
+name = "sentinel_scanner"
 version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "sentinel_media_scanner"
+name = "sentinel_scanner"
 path = "src/main.rs"
 
 [lib]
-name = "sentinel_media_scanner"
+name = "sentinel_scanner"
 path = "src/lib.rs"
 
 [dependencies]

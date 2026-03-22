@@ -16,7 +16,7 @@ use std::process::{Command, Stdio};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use sysinfo::{ProcessRefreshKind, RefreshKind, System};
 use tauri::Emitter;
-use sentinel_media_core::FactoryConfig;
+use sentinel_core::FactoryConfig;
 use lazy_static::lazy_static;
 use std::env;
 use std::sync::Mutex;

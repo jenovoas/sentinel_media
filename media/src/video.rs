@@ -3,7 +3,7 @@ use reqwest::Client;
 use serde_json::json;
 use std::path::Path;
 use std::process::Command;
-use sentinel_media_core::FactoryConfig;
+use sentinel_core::FactoryConfig;
 
 pub async fn get_gcloud_token() -> Result<String> {
     let output = Command::new("gcloud")
@@ -66,12 +66,12 @@ pub async fn generate_video_vertex(
                     println!("   Use 'gcloud ai operations describe {} --region={}' to check status.", op_name, location);
                     
                     let store_path = Path::new(".sentinel/operations.json");
-                    let mut store = sentinel_media_core::OperationStore::load(store_path).unwrap_or_default();
+                    let mut store = sentinel_core::OperationStore::load(store_path).unwrap_or_default();
                     
-                    store.add(sentinel_media_core::Operation {
+                    store.add(sentinel_core::Operation {
                         id: op_name.to_string(),
-                        op_type: sentinel_media_core::OpType::VideoGeneration,
-                        status: sentinel_media_core::OpStatus::Running,
+                        op_type: sentinel_core::OpType::VideoGeneration,
+                        status: sentinel_core::OpStatus::Running,
                         created_at: chrono::Utc::now(),
                         updated_at: chrono::Utc::now(),
                         prompt: prompt.to_string(),

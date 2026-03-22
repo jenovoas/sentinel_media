@@ -8,7 +8,7 @@ use std::env;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use tokio::fs;
-use sentinel_media_core::{load_agent_skill, FactoryConfig};
+use sentinel_core::{load_agent_skill, FactoryConfig};
 
 pub mod video;
 pub mod image;

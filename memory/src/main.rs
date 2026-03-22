@@ -1,12 +1,12 @@
 use anyhow::Result;
-use sentinel_media_memory::{CandleEmbedder, Document, VectorStore};
+use sentinel_memory::{CandleEmbedder, Document, VectorStore};
 use clap::{Parser, Subcommand};
 use std::fs;
 use std::path::PathBuf;
 use walkdir::WalkDir;
 
 #[derive(Parser)]
-#[command(name = "sentinel_media_memory")]
+#[command(name = "sentinel_memory")]
 struct Cli {
     #[command(subcommand)]
     command: Commands,

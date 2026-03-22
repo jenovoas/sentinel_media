@@ -1,5 +1,5 @@
 [package]
-name = "sentinel_media_obs_agent"
+name = "sentinel_obs_agent"
 version = "0.1.0"
 edition = "2024"
 
@@ -21,5 +21,5 @@ clap = { version = "4.5", features = ["derive"] }
 sha2 = "0.10"
 chrono = { version = "0.4", features = ["serde"] }
 anyhow = "1.0"
-sentinel_media_core = { path = "../sentinel_media_core" }
-sentinel_media_memory = { path = "../sentinel_media_memory" }
+sentinel_core = { path = "../core" }
+sentinel_memory = { path = "../memory" }

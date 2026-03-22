@@ -1,5 +1,5 @@
 [package]
-name = "sentinel_media_verifier"
+name = "sentinel_verifier"
 version = "0.1.0"
 edition = "2021"
 
@@ -14,4 +14,4 @@ dotenvy = "0.15"
 regex = "1.10"
 chrono = "0.4"
 colored = "2.0"
-sentinel_media_core = { path = "../sentinel_media_core" }
+sentinel_core = { path = "../core" }

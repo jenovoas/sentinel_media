@@ -6,7 +6,7 @@ use std::fs;
 use std::process::Command;
 use std::path::PathBuf;
 use serde_json::json;
-use sentinel_media_core::{load_agent_skill, FactoryConfig};
+use sentinel_core::{load_agent_skill, FactoryConfig};
 
 pub mod telos_indexer;
 pub mod rate_limiter;

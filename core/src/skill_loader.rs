@@ -40,7 +40,7 @@ pub fn load_skill(skill_path: &str) -> Result<String> {
 ///
 /// # Ejemplo
 /// ```rust,ignore
-/// use sentinel_media_core::load_agent_skill;
+/// use sentinel_core::load_agent_skill;
 /// let skill = load_agent_skill()?;
 /// ```
 pub fn load_agent_skill() -> Result<String> {

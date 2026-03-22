@@ -1,5 +1,5 @@
 use clap::Parser;
-use sentinel_media_publisher::{run, Args};
+use sentinel_publisher::{run, Args};
 
 #[tokio::main]
 async fn main() {

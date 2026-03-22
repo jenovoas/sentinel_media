@@ -1,5 +1,5 @@
 /*
-use sentinel_media_core::{OpStatus, OperationStore};
+use sentinel_core::{OpStatus, OperationStore};
 use me60os_core::agent_manager::AgentSPA;
 use me60os_core::cortex::CortexEngine;
 use std::path::Path;
