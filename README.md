@@ -1,4 +1,5 @@
 # ⚛️ Sentinel Media | Fenix Swarm
+
 **Orquestación Neuronal, Ingeniería Defensiva y Generación Autónoma de Contenido**
 
 *Sentinel Media no es un simple script de automatización. Es una infraestructura de conocimiento profundo (SSOT) orquestada en Rust, respaldada por matemáticas en Base-60 y memorias Ring-0 (eBPF), diseñada para sintetizar filosofía técnica, física avanzada y ciberseguridad en contenido de rigor profesional.*
@@ -10,7 +11,7 @@ Toda IA, Agente o Pipeline operando en este entorno debe someterse a la siguient
 1. **SEPARACIÓN DE DOMINIOS** — La Bóveda (`vault/`) gestiona el conocimiento y significado. Sentinel gestiona la infraestructura de la fábrica. Prohibido mezclarlos.
 2. **PRECISIÓN EN EL CONOCIMIENTO** — Validación estricta de fuentes. Distinguir la teoría interna (Matemática S60) de la ciencia empírica externa.
 3. **VERDAD SISTÉMICA** — Auditoría continua contra oráculos y modelos consolidados (NotebookLM / Vertex AI) a pedido del usuario.
-4. **HONESTIDAD RADICAL** — Prohibido alucinar. Ante la duda o falta de evidencia computacional, el sistema reporta "SIN DATOS". 
+4. **HONESTIDAD RADICAL** — Prohibido alucinar. Ante la duda o falta de evidencia computacional, el sistema reporta "SIN DATOS".
 5. **IDIOMA SAGRADO** — El **Español** es obligatorio para todo el flujo conversacional, generación y estrategia. El Inglés se reserva puramente para la sintaxis técnica del código.
 
 ## 🏗️ Jerarquía de Verdad (SSOT)
@@ -54,6 +55,7 @@ El sistema utiliza una arquitectura modular donde cada crate representa un agent
 
 **Requisitos Previos del Sistema (Linux):**
 Para poder compilar la interfaz gráfica de Tauri (sentinel-media-gui) sin errores:
+
 ```bash
 sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libssl-dev libayatana-appindicator3-dev librsvg2-dev
 ```

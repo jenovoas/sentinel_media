@@ -28,8 +28,30 @@ pub struct RateLimiter {
 }
 
 impl RateLimiter {
+    fn get_vault_path() -> PathBuf {
+        std::env::var("BOVEDA_HOME")
+            .map(PathBuf::from)
+            .unwrap_or_else(|_| {
+                // Determine vault dynamically or default to local vault/
+                let current = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
+                if current.join("vault").exists() {
+                    current.join("vault")
+                } else if let Some(home) = dirs::home_dir() {
+                    home.join("Desarrollo/sentinel_media/vault")
+                } else {
+                    PathBuf::from("vault")
+                }
+            })
+    }
+
     pub fn new() -> Self {
-        let path = PathBuf::from("/home/jnovoas/Obsidian/_Agentes/sentinel_rate_limits.json");
+        let path = Self::get_vault_path().join(".sentinel/sentinel_rate_limits.json");
+        
+        // Ensure parent dir exists
+        if let Some(parent) = path.parent() {
+            let _ = fs::create_dir_all(parent);
+        }
+
         let data = if path.exists() {
             fs::read_to_string(&path)
                 .ok()

@@ -907,7 +907,7 @@ fn get_archivos_sentinel_media() -> Vec<VaultFile> {
 
 #[tauri::command]
 fn get_reportes_investigacion() -> Vec<ResearchReport> {
-    let research_path = PathBuf::from("/home/jnovoas/Obsidian");
+    let research_path = PathBuf::from("vault");
     let mut reports = vec![];
     if let Ok(entries) = fs::read_dir(research_path) {
         for entry in entries.filter_map(|e| e.ok()) {
@@ -3078,8 +3078,8 @@ async fn check_gpu_status() -> HardwareStatus {
     }
 }
 
-const VAULT_PATH: &str = "/home/jnovoas/Desarrollo/obsidian";
-const AGENTS_PATH: &str = "/home/jnovoas/Desarrollo/obsidian/_Agentes";
+const VAULT_PATH: &str = "vault";
+const AGENTS_PATH: &str = ".";
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlimptonRatio {
