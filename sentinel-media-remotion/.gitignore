@@ -1,0 +1,10 @@
+node_modules
+out
+*.mp4
+*.mkv
+*.webm
+.DS_Store
+remotion_manifest.json
+dist
+build
+.env

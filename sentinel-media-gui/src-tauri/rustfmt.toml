@@ -1,0 +1,47 @@
+# Configuración de rustfmt para Sentinel Cortex
+# Estilo de código profesional y consistente
+
+# Ancho máximo de línea
+max_width = 100
+
+# Importaciones
+imports_granularity = "Crate"
+group_imports = "StdExternalCrate"
+
+# Formato
+edition = "2021"
+hard_tabs = false
+tab_spaces = 4
+
+# Newlines
+newline_style = "Unix"
+fn_single_line = false
+
+# Chains y match
+chain_width = 60
+match_arm_blocks = true
+match_block_trailing_comma = true
+
+# Comments y documentación
+normalize_comments = true
+normalize_doc_attributes = true
+wrap_comments = true
+
+# Control de flujo
+control_brace_style = "AlwaysSameLine"
+brace_style = "SameLineWhere"
+
+# Arrays y structs
+trailing_comma = "Vertical"
+trailing_semicolon = true
+
+# Espacios
+space_before_colon = false
+space_after_colon = true
+
+# Misc
+reorder_imports = true
+reorder_modules = true
+remove_nested_parens = true
+use_field_init_shorthand = true
+use_try_shorthand = true

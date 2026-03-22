@@ -1,0 +1,21 @@
+[package]
+name = "sentinel_media_scanner"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "sentinel_media_scanner"
+path = "src/main.rs"
+
+[lib]
+name = "sentinel_media_scanner"
+path = "src/lib.rs"
+
+[dependencies]
+ignore = "0.4"
+rayon = "1.8"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+regex = "1.10"
+anyhow = "1.0"
+clap = { version = "4.4", features = ["derive"] }

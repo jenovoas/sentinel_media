@@ -1,0 +1,18 @@
+[workspace]
+resolver = "2"
+members = [
+    "sentinel_media_core",
+    "sentinel_media_scanner",
+    "sentinel_media_research",
+    "sentinel_media_media",
+    "sentinel_media_publisher",
+    "sentinel_media_verifier",
+    "sentinel_media_memory",
+    "sentinel_media_cli",
+    "sentinel_media_system",
+    "sentinel_media_obs_agent",
+    "sentinel-media-gui/src-tauri",
+]
+
+# NOTA: Los directorios 'sentinel-media-gui' (Tauri) y 'sentinel-media-remotion' (Node.js) 
+# no se incluyen aquí porque no son crates de Rust estándar del workspace.

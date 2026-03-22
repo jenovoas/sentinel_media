@@ -1,0 +1,29 @@
+[package]
+name = "sentinel_media_research"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "sentinel_media_research"
+path = "src/main.rs"
+
+[lib]
+name = "sentinel_media_research"
+path = "src/lib.rs"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+# lopdf = "0.29"
+anyhow = "1.0"
+clap = { version = "4.4", features = ["derive"] }
+dotenvy = "0.15"
+walkdir = "2"
+regex = "1.10"
+futures = "0.3"
+chrono = "0.4"
+rand = "0.8"
+uuid = { version = "1.0", features = ["v4"] }
+sentinel_media_core = { path = "../sentinel_media_core" }

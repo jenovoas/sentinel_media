@@ -1,0 +1,23 @@
+channels:
+  secure_penguin:
+    channel_id: "UCxxxxxxxxxxxxxxxx"
+    client_id: "${YOUTUBE_CLIENT_ID}"
+    client_secret: "${YOUTUBE_CLIENT_SECRET}"
+    token_cache_path: "~/.config/sentinel_media/yt_token_secure_penguin.json"
+    default_category: 28  # Science & Technology
+    default_tags: ["linux", "seguridad", "rust", "hardening"]
+    default_playlist: ""
+  zero_ring:
+    channel_id: "UCyyyyyyyyyyyyyyyy"
+    client_id: "${YOUTUBE_CLIENT_ID}"
+    client_secret: "${YOUTUBE_CLIENT_SECRET}"
+    token_cache_path: "~/.config/sentinel_media/yt_token_zero_ring.json"
+    default_category: 28
+    default_tags: ["fisica", "base60", "quantum", "entropia"]
+  sentinel_labs:
+    channel_id: "UCzzzzzzzzzzzzzzzz"
+    client_id: "${YOUTUBE_CLIENT_ID}"
+    client_secret: "${YOUTUBE_CLIENT_SECRET}"
+    token_cache_path: "~/.config/sentinel_media/yt_token_sentinel_labs.json"
+    default_category: 28
+    default_tags: ["rust", "kernel", "ebpf", "sistemas"]

@@ -1,0 +1,28 @@
+[package]
+name = "sentinel_media_cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.4", features = ["derive"] }
+anyhow = "1.0"
+colored = "2.0"
+dotenvy = "0.15"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+chrono = { version = "0.4", features = ["serde"] }
+reqwest = { version = "0.11", features = ["json"] }
+tokio = { version = "1", features = ["full"] }
+google-youtube3 = { version = "5.0.5", features = ["yup-oauth2"] }
+hyper = "0.14"
+hyper-rustls = "0.24"
+sysinfo = "0.38.0"
+rand = "0.8"
+ratatui = "0.30.0"
+crossterm = "0.29.0"
+sentinel_media_core = { path = "../sentinel_media_core" }
+sentinel_media_scanner = { path = "../sentinel_media_scanner" }
+sentinel_media_research = { path = "../sentinel_media_research" }
+sentinel_media_media = { path = "../sentinel_media_media" }
+sentinel_media_publisher = { path = "../sentinel_media_publisher" }

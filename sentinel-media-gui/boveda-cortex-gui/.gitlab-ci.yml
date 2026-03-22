@@ -1,0 +1,114 @@
+# GitLab CI/CD - Sentinel Cortex
+# Pipeline profesional para validación automática
+
+stages:
+  - format
+  - lint
+  - test
+  - audit
+  - build
+
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/.cargo
+
+cache:
+  paths:
+    - .cargo/
+    - src-tauri/target/
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# STAGE 1: Formateo
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+rust:fmt:
+  stage: format
+  image: rust:latest
+  script:
+    - cd src-tauri
+    - rustup component add rustfmt
+    - cargo fmt -- --check
+  allow_failure: false
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# STAGE 2: Linting
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+rust:clippy:
+  stage: lint
+  image: rust:latest
+  script:
+    - cd src-tauri
+    - rustup component add clippy
+    - cargo clippy --all-targets --all-features -- -D warnings
+  artifacts:
+    reports:
+      codequality: clippy-report.json
+    when: always
+    expire_in: 1 week
+  allow_failure: false
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# STAGE 3: Tests
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+rust:test:
+  stage: test
+  image: rust:latest
+  script:
+    - cd src-tauri
+    - cargo test --all-features --verbose
+  coverage: '/\d+\.\d+% coverage/'
+  artifacts:
+    reports:
+      junit: test-results.xml
+    when: always
+    expire_in: 1 week
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# STAGE 4: Auditoría de Seguridad
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+rust:audit:
+  stage: audit
+  image: rust:latest
+  script:
+    - cargo install cargo-audit
+    - cd src-tauri
+    - cargo audit
+  allow_failure: true
+  artifacts:
+    paths:
+      - security-audit.txt
+    expire_in: 1 month
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# STAGE 5: Build de Verificación
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+rust:build:
+  stage: build
+  image: rust:latest
+  script:
+    - cd src-tauri
+    - cargo build --release --all-features
+  artifacts:
+    paths:
+      - src-tauri/target/release/
+    expire_in: 3 days
+  only:
+    - main
+    - develop
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Job Opcional: Métricas de Código
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+code:metrics:
+  stage: audit
+  image: rust:latest
+  script:
+    - cargo install tokei
+    - tokei src-tauri
+  allow_failure: true
+  only:
+    - main

@@ -1,0 +1,16 @@
+{
+  "name": "sentinel_publisher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "google-auth-library": "^10.5.0",
+    "googleapis": "^171.1.0"
+  }
+}

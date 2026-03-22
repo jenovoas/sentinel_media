@@ -1,0 +1,58 @@
+# --- Arquitectura Sentinel Media ---
+
+# Rust (General)
+target/
+**/*.rs.bk
+Cargo.lock
+
+# Node.js / Vite
+node_modules/
+dist/
+dist-ssr/
+*.local
+.eslintcache
+
+# Tauri
+src-tauri/target/
+src-tauri/binaries/
+
+# Secretos y Entorno
+.env
+.env.*
+!.env.example
+secrets.json
+sentinel_keys.json
+*.pem
+*.key
+*.pub
+id_rsa*
+
+# Infraestructura Fenix (Ring 0)
+/var/lib/pai60/*
+/tmp/sentinel/*
+*.crystal
+*.mmap
+
+# IDEs y Varios
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+.gemini/
+brain/
+task.md
+implementation_plan.md
+walkthrough.md
+
+# Obsidian (Legacy / Marca Registrada)
+obsidian/
+_Agentes/
+boveda/
+
+# Logs y Temporales
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.turbo/

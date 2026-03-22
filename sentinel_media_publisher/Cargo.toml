@@ -1,0 +1,29 @@
+[package]
+name = "sentinel_media_publisher"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "sentinel_media_publisher"
+path = "src/main.rs"
+
+[lib]
+name = "sentinel_media_publisher"
+path = "src/lib.rs"
+
+[dependencies]
+tokio = { version = "1.28", features = ["full"] }
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+google-youtube3 = "5.0.2"
+yup-oauth2 = "9.0"
+hyper = { version = "0.14.27", features = ["full"] }
+hyper-rustls = { version = "0.24.1", features = ["http1", "http2", "tls12"] }
+mime = "0.3"
+clap = { version = "4.0", features = ["derive"] }
+colored = "2.0"
+dotenvy = "0.15"
+sentinel_media_core = { path = "../sentinel_media_core" }
+shellexpand = "3.1"
