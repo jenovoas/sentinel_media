@@ -10,7 +10,7 @@ members = [
     "memory",
     "cli",
     "system",
-    "agent-obsidian",
+    "sentinel-vault-agent",
     "sentinel-media-gui/src-tauri",
     "libs/me60os-ring0",
 ]

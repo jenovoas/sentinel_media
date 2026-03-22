@@ -1,10 +1,10 @@
 [package]
-name = "sentinel_obs_agent"
+name = "sentinel_vault_agent"
 version = "0.1.0"
 edition = "2024"
 
 [[bin]]
-name = "obs-agente"
+name = "sentinel-vault-agent"
 path = "src/main.rs"
 
 

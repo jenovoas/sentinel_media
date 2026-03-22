@@ -39,7 +39,7 @@ El sistema utiliza una arquitectura modular donde cada crate representa un agent
 | `media/` (sentinel_media_media) | Motor de renderizado (Veo 3.0 / procesamiento A/V) | ✅ Compila |
 | `libs/me60os` | Sistema base-60 ME-60OS, matemática SPA/YATRA | ✅ Compila |
 | `liquid_sim` | Simulador de sinapsis líquidas | ✅ Compila |
-| `obs-agente-rs` | Agente principal en Rust | ✅ Compila |
+| `sentinel-vault-agent` | Agente principal en Rust | ✅ Compila |
 | `sentinel-media-gui` | GUI Tauri (Rust + React) de monitoreo | ✅ Compila |
 
 ## 🔧 Compilación y Requisitos Técnicos
@@ -57,7 +57,7 @@ Debido a que cada agente es su propio Crate altamente acoplado a la infraestruct
 
 ```bash
 # Compilar cada motor individualmente en el Workspace
-for project in core cli research publisher memory scanner verifier system media libs/me60os liquid_sim obs-agente-rs; do
+for project in core cli research publisher memory scanner verifier system media libs/me60os liquid_sim sentinel-vault-agent; do
     echo "Compilando $project..."
     cd $project && cargo check && cd ..
 done
