@@ -7,17 +7,43 @@ channels:
     default_category: 28  # Science & Technology
     default_tags: ["linux", "seguridad", "rust", "hardening"]
     default_playlist: ""
-  zero_ring:
-    channel_id: "UCyyyyyyyyyyyyyyyy"
+
+  code_penguin:
+    channel_id: "UCyyyyyyyyyyyyyyyya"
     client_id: "${YOUTUBE_CLIENT_ID}"
     client_secret: "${YOUTUBE_CLIENT_SECRET}"
-    token_cache_path: "~/.config/sentinel_media/yt_token_zero_ring.json"
+    token_cache_path: "~/.config/sentinel_media/yt_token_code_penguin.json"
     default_category: 28
-    default_tags: ["fisica", "base60", "quantum", "entropia"]
-  sentinel_labs:
-    channel_id: "UCzzzzzzzzzzzzzzzz"
+    default_tags: ["javascript", "appsec", "prototype-pollution", "xss", "code-review"]
+
+  quantum_penguin:
+    channel_id: "UCyyyyyyyyyyyyyyyyb"
     client_id: "${YOUTUBE_CLIENT_ID}"
     client_secret: "${YOUTUBE_CLIENT_SECRET}"
-    token_cache_path: "~/.config/sentinel_media/yt_token_sentinel_labs.json"
+    token_cache_path: "~/.config/sentinel_media/yt_token_quantum_penguin.json"
     default_category: 28
-    default_tags: ["rust", "kernel", "ebpf", "sistemas"]
+    default_tags: ["fisica", "cuantica", "fase", "s60", "memoria-holografica"]
+
+  sumer_penguin:
+    channel_id: "UCyyyyyyyyyyyyyyyyc"
+    client_id: "${YOUTUBE_CLIENT_ID}"
+    client_secret: "${YOUTUBE_CLIENT_SECRET}"
+    token_cache_path: "~/.config/sentinel_media/yt_token_sumer_penguin.json"
+    default_category: 28
+    default_tags: ["matematicas", "base60", "sumeria", "geometria", "s60"]
+
+  kernel_penguin:
+    channel_id: "UCyyyyyyyyyyyyyyyyd"
+    client_id: "${YOUTUBE_CLIENT_ID}"
+    client_secret: "${YOUTUBE_CLIENT_SECRET}"
+    token_cache_path: "~/.config/sentinel_media/yt_token_kernel_penguin.json"
+    default_category: 28
+    default_tags: ["linux", "kernel", "privesc", "ebpf", "sistemas"]
+
+  auto_penguin:
+    channel_id: "UCyyyyyyyyyyyyyyyye"
+    client_id: "${YOUTUBE_CLIENT_ID}"
+    client_secret: "${YOUTUBE_CLIENT_SECRET}"
+    token_cache_path: "~/.config/sentinel_media/yt_token_auto_penguin.json"
+    default_category: 28
+    default_tags: ["automatizacion", "pipelines", "ci-cd", "simulacion", "scripting"]

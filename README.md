@@ -27,8 +27,11 @@ La toma de decisiones del Cortex se basa en un flujo sagrado de ingesta:
 La *Factory* está diseñada para nutrir pilares de conocimiento técnico denso y sin diluir, rechazando de pleno enfoques genéricos:
 
 - 🐧 **SecurePenguin ("El Ingeniero Soberano")** — Ciberseguridad Defensiva, eBPF y Hardening. Promulga la soberanía digital y el paso de C a Rust como victoria táctica del siglo.
-- 🌀 **ZeroRing ("La Elegancia de las Leyes Naturales")** — Física Avanzada, entropía, cosmología teórica y sistemas ZPE.
-- 🦀 **SentinelLabs ("Arquitectura de Sistemas")** — OS Internals, desarrollo profundo en Rust, optimización y mecánicas del Kernel.
+- 💻 **CodePenguin ("El Code Hacker")** — Programación ofensiva, JS leído como atacante, prototype pollution, XSS y code review defensivo.
+- ⚛️ **QuantumPenguin ("El Físico Soberano")** — Física de dispositivos, memoria de fase cuántica, S60 y lectura experimental.
+- 🔷 **SumerPenguin ("El Matemático Soberano")** — Matemática estructural base-60, axiomas S60 y geometría fundacional.
+- 🐧 **KernelPenguin ("El Root Curioso")** — Linux por dentro: shell, escalada de privilegios y kernel. Funcionamiento, no defensa.
+- ⚙️ **AutoPenguin ("El Automatizador Soberano")** — Pipelines reproducibles, automatización con código visible y simulación antes de producción.
 
 ## 🚀 Proyectos Rust Activos en la Fábrica
 

@@ -75,15 +75,21 @@ async fn factory_pipeline(args: &FactoryArgs) -> Result<()> {
     for candidate in &scan_output.ready {
         println!("   -> Investigando: {}", candidate.rel_path.bright_blue());
         
-        // Determinar canal basado en la ruta (heurística simple: nombre de carpeta)
+        // Determinar canal basado en la ruta (heurística: nombre de carpeta raíz del canal)
         let channel = if candidate.rel_path.contains("SecurePenguin") {
             "secure_penguin"
-        } else if candidate.rel_path.contains("ZeroRing") {
-            "zero_ring"
-        } else if candidate.rel_path.contains("SentinelLabs") {
-            "sentinel_labs"
+        } else if candidate.rel_path.contains("CodePenguin") {
+            "code_penguin"
+        } else if candidate.rel_path.contains("QuantumPenguin") {
+            "quantum_penguin"
+        } else if candidate.rel_path.contains("SumerPenguin") {
+            "sumer_penguin"
+        } else if candidate.rel_path.contains("KernelPenguin") {
+            "kernel_penguin"
+        } else if candidate.rel_path.contains("AutoPenguin") {
+            "auto_penguin"
         } else {
-            "sentinel_labs" // Default
+            "secure_penguin" // Default
         };
 
         let research_args = ResearchArgs {

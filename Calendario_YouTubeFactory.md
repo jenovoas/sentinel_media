@@ -10,8 +10,11 @@
 | Canal | Nicho | Carpeta Bóveda | Estado |
 | :--- | :--- | :--- | :--- |
 | 🐧 **SecurePenguin** | Ciberseguridad / Linux | `SecurePenguin/` | ⏳ En desarrollo |
-| 🌀 **ZeroRing** | Física Avanzada | `Fisica/` | ⏳ En desarrollo |
-| 🦀 **SentinelLabs** | Dev / OS Internals / Rust | `Developer/` | ⏳ En desarrollo |
+| 💻 **CodePenguin** | Programación Ofensiva / JS | `CodePenguin/` | ⏳ En desarrollo |
+| ⚛️ **QuantumPenguin** | Física Cuántica / S60 | `QuantumPenguin/` | ⏳ En desarrollo |
+| 🔷 **SumerPenguin** | Matemática Base-60 / S60 | `SumerPenguin/` | ⏳ En desarrollo |
+| 🐧 **KernelPenguin** | Linux / Kernel Internals | `KernelPenguin/` | ⏳ En desarrollo |
+| ⚙️ **AutoPenguin** | Automatización / Pipelines | `AutoPenguin/` | ⏳ En desarrollo |
 
 ---
 
@@ -21,13 +24,13 @@
 
 | Día | Canal | Tipo de Contenido | Horario (GMT-3) |
 | :--- | :--- | :--- | :--- |
-| Lunes | SentinelLabs | Short (Optimización/Rust) | 12:00 |
+| Lunes | KernelPenguin | Short (Internals/Rust) | 12:00 |
 | Martes | SecurePenguin | Short (Cyber-Insight) | 12:00 |
-| Miércoles | SentinelLabs | Video principal | 19:00 |
+| Miércoles | AutoPenguin | Video principal (Pipeline) | 19:00 |
 | Jueves | SecurePenguin | Video principal | 19:00 |
-| Viernes | SentinelLabs | Short avanzado | 12:00 |
-| Sábado | ZeroRing | Video principal (Física) | 19:00 |
-| Domingo | SecurePenguin | Video principal | 12:00 |
+| Viernes | CodePenguin | Short (Offensive JS) | 12:00 |
+| Sábado | QuantumPenguin | Video principal (Física) | 19:00 |
+| Domingo | SumerPenguin | Video principal (Base-60) | 12:00 |
 
 ---
 
@@ -59,10 +62,21 @@ sentinel_media_publisher → sube a YouTube con metadatos
 - Guion maestro XZ Backdoor — `SecurePenguin/Guiones/`
 - Estrategia de nicho — `SecurePenguin/Estrategia_Nicho_SecurePenguin.md`
 
-### ZeroRing
-- [ ] Definir estética visual (abstracto/cosmológico)
-- [ ] Seleccionar temas seminales (Entropía, Tiempo, Quantum, Base-60)
+### CodePenguin
+- [ ] Roadmap JS ofensivo — Prototype Pollution, DOM Clobbering, XSS
 
-### SentinelLabs
-- [ ] Roadmap de contenido Rust avanzado
-- [ ] Guiones de OS Internals (Kernel, eBPF, Drivers)
+### QuantumPenguin
+- [ ] Definir estética visual (abstracto/cosmológico)
+- [ ] Seleccionar temas seminales (Fase, S60, Zhang & Wang)
+
+### SumerPenguin
+- [ ] Roadmap matemática base-60 y axiomas S60
+- [ ] Demos visuales de geometría sexagesimal
+
+### KernelPenguin
+- [ ] Roadmap de contenido Linux internals
+- [ ] Guiones de OS Internals (Kernel, eBPF, privesc)
+
+### AutoPenguin
+- [ ] Roadmap de pipelines reproducibles
+- [ ] Guiones de automatización (factory → publish end-to-end)

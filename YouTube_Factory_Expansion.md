@@ -9,8 +9,11 @@
 | Canal | Nicho | Identidad | Carpeta |
 | :--- | :--- | :--- | :--- |
 | **SecurePenguin** | Ciberseguridad / Linux | El Ingeniero Soberano | `SecurePenguin/` |
-| **ZeroRing** | Física Avanzada | La Elegancia de las Leyes Naturales | `Fisica/` |
-| **SentinelLabs** | Dev / OS Internals | Arquitectura y Optimización de Sistemas | `Developer/` |
+| **CodePenguin** | Programación Ofensiva / JS | El Code Hacker | `CodePenguin/` |
+| **QuantumPenguin** | Física Cuántica / S60 | El Físico Soberano | `QuantumPenguin/` |
+| **SumerPenguin** | Matemática Base-60 / S60 | El Matemático Soberano | `SumerPenguin/` |
+| **KernelPenguin** | Linux / Kernel Internals | El Root Curioso | `KernelPenguin/` |
+| **AutoPenguin** | Automatización / Pipelines | El Automatizador Soberano | `AutoPenguin/` |
 
 ---
 
