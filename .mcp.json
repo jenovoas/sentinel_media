@@ -6,7 +6,7 @@
         "code-review-graph",
         "serve"
       ],
-      "cwd": "/home/jnovoas/Proyectos/sentinel_media",
+      "cwd": "/home/jnovoas/proyectos/sentinel_media",
       "type": "stdio"
     }
   }
