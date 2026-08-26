@@ -1,5 +1,11 @@
 # ARQUITECTURA Y DIRECTIVAS PARA AGENTES E IA — SENTINEL MEDIA
 
+> **Infraestructura compartida 2026-08-26:** `fenix` compila y aloja
+> `dns1.pinguinoseguro.cl`; `kingu` aloja producción contenerizada con Traefik
+> y `dns2.pinguinoseguro.cl`. No usar memorias históricas como prueba del
+> estado actual. Referencia:
+> `/home/jnovoas/proyectos/sysdocs/02-topologia-y-metodologia-transicion-2026-08-26.md`.
+
 > **LECTURA OBLIGATORIA ANTES DE EMITIR JUICIOS SOBRE EL PROYECTO:**
 > [`sentinel-scientific-foundation.md`](file:///home/jnovoas/.config/Code/User/workspaceStorage/7c63ffead990815376933d02c94d88c9/GitHub.copilot-chat/memory-tool/memories/repo/sentinel-scientific-foundation.md)
 >
